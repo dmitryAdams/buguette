@@ -12,6 +12,7 @@ namespace global
     extern lexeme lex;
     extern int ind;
     extern std::string text;
+    extern int string_number;
 };
 
 

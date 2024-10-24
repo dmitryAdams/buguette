@@ -4,7 +4,7 @@
 enum LexemeType
 {
     NULLLEXEME, Identificator, Service_word, Type, Literal, Operator, Comma, Semicolon, Open_brace,
-    Close_brace, Open_curly_brace, Close_curly_brace, Other
+    Close_brace, Open_curly_brace, Close_curly_brace, Other, String_Literal
 };
 
 struct lexeme
