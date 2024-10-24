@@ -7,5 +7,7 @@ add_executable(bugguette main.cpp
  lexer
         starter.cpp
         lexer.cpp
-        globalVariables.h)
+        globalVariables.h
+        structures/trie/Trie.cpp
+        structures/trie/Trie.h)
 
