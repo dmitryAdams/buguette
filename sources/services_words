@@ -6,11 +6,6 @@ if
 else
 switch
 case
-int
-float
-bool
-char
-string
-array
-void
 pass
+return
+print

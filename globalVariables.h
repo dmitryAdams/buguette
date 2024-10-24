@@ -1,11 +1,19 @@
 #ifndef GLOBAL_VARIABLES_H
 #define GLOBAL_VARIABLES_H
 
-#include "lib.h"
-#include "lexer.h"
+// #include "lib.h"
 
-static lexeme lex;
-int ind = 0;
-std::string text;
+#include "./structures/trie/Trie.h"
+#include "lexer/lexer.h"
+
+namespace global
+{
+    extern Trie service_words_trie, types_trie;
+    extern lexeme lex;
+    extern int ind;
+    extern std::string text;
+};
+
+
 
 #endif
