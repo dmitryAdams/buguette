@@ -4,5 +4,8 @@ project(bugguette)
 set(CMAKE_CXX_STANDARD 17)
 
 add_executable(bugguette main.cpp
-        structures/trie/Trie.cpp
-        structures/trie/Trie.h)
+ lexer
+        starter.cpp
+        lexer.cpp
+        globalVariables.h)
+
