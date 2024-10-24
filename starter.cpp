@@ -2,7 +2,7 @@
 #include "globalVariables.h"
 
 void starter() {
-    std::ifstream fin("ProgrammingLanguage/program.txt", std::ios::binary);
+    std::ifstream fin("../sources/program.txt");
     fin.seekg(0, std::ios::end);
     std::streampos fileSize = fin.tellg();
     fin.seekg(0, std::ios::beg);

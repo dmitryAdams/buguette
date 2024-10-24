@@ -7,4 +7,19 @@ struct lexeme {
     std::string name;
 };
 
+class Lexer {
+public:
+
+    Lexer(): current_lexeme_(0), text_() {
+
+    }
+
+    void getLex();
+
+
+private:
+    int current_lexeme_;
+    std::vector<lexeme> text_;
+};
+
 void get_lex();

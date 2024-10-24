@@ -1,6 +1,7 @@
 #include "iostream"
-
+#include "lexer.h"
+#include "starter.h"
 int main(){
-    std::cerr << "ne materis";
+    starter();
     return 0;
 }

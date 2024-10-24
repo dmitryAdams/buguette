@@ -1,6 +1,6 @@
 #include "lexer.h"
 
-void get_lex() {
+void getLex() {
 
 }
 
