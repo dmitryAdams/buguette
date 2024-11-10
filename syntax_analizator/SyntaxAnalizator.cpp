@@ -154,7 +154,13 @@ void operator_() {
         throw SyntaxError((std::string("Expected ';' ") + std::to_string(global::lex.num)).c_str());
       }
       break;
-    default:expression_();
+    default:
+      expression_();
+      if (global::lex.type == LexemeType::Semicolon) {
+        getLex();
+      } else {
+        throw SyntaxError((std::string("Expected ';' ") + std::to_string(global::lex.num)).c_str());
+      }
   }
 }
 void return_() {
