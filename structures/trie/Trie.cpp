@@ -42,16 +42,16 @@ bool Trie::checkString(const std::string& s)
 
 Trie::~Trie()
 {
-    TrieNode::kill(root_);
+    TrieNode::deleteSubtree(root_);
 }
 
-void Trie::TrieNode::kill(TrieNode* v)
+void Trie::TrieNode::deleteSubtree(TrieNode* v)
 {
     if (v)
     {
         for (auto [c, i] : v->children_)
         {
-            kill(i);
+            deleteSubtree(i);
         }
     }
     delete v;

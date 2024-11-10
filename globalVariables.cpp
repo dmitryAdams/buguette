@@ -7,4 +7,5 @@ namespace global
     int ind = 0;
     std::string text;
     int string_number = 0;
+    bool eof = false;
 };

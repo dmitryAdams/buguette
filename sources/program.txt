@@ -1,16 +1,7 @@
-sdg
-sdfg
-sf
-sdg
-sd
-g
-sdg
-sdg
-s
-dg dfg dfgd gdfg dfg df gdf gdg  gdfg df gdf gdf gdf gdf gdf d
-sdg
+def int f(int x, int y){
+    return x + y;
+}
 
-sdg
-s
-dg
-s dfg
+main(){
+    int a = 7 + 3, b = "aboba", c = 1488;
+}

@@ -13,6 +13,7 @@ namespace global
     extern int ind;
     extern std::string text;
     extern int string_number;
+    extern bool eof;
 };
 
 

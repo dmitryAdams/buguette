@@ -10,5 +10,10 @@ add_executable(bugguette main.cpp
         globalVariables.h
         structures/trie/Trie.h
         structures/trie/Trie.cpp
-        globalVariables.cpp)
+        globalVariables.cpp
+        syntax_analizator/SyntaxAnalizator.cpp
+        syntax_analizator/SyntaxAnalizator.h
+        syntax_analizator/syntax_error/SyntaxError.cpp
+        syntax_analizator/syntax_error/SyntaxError.h
+)
 

@@ -5,9 +5,18 @@ bool getLex()
 {
     if (global::ind >= global::text.size())
     {
+        global::eof = true;
         return false;
     }
     std::string cur_lex;
+    //TODO Напистаь комментарии
+    // if(global::text[global::ind] == '#')
+    // {
+    //     while (global::ind < global::text.size() && global::text[global::ind] != '\n')
+    //     {
+    //         ++global::ind;
+    //     }
+    // }
     while (global::ind < global::text.size() && global::text[global::ind] == ' ' || global::text[global::ind] == '\n')
     {
         global::string_number += global::text[global::ind] == '\n';
@@ -42,8 +51,17 @@ bool getLex()
     }
     if (std::isdigit(global::text[global::ind]))
     {
-        while (global::ind < global::text.size() && (std::isdigit(global::text[global::ind]) || global::text[
-            global::ind] == '.'))
+        while (global::ind < global::text.size() && (std::isdigit(global::text[global::ind])))
+        {
+            cur_lex.push_back(global::text[global::ind]);
+            ++global::ind;
+        }
+        if(global::ind < global::text.size() && global::text[global::ind] == '.')
+        {
+            cur_lex.push_back(global::text[global::ind]);
+            ++global::ind;
+        }
+        while (global::ind < global::text.size() && (std::isdigit(global::text[global::ind])))
         {
             cur_lex.push_back(global::text[global::ind]);
             ++global::ind;
@@ -77,6 +95,14 @@ bool getLex()
         ++global::ind;
         return true;
     }
+  if (global::text[global::ind] == '[')
+  {
+    global::lex.type = Open_square_brace;
+    global::lex.name = "[";
+    global::lex.num = global::string_number;
+    ++global::ind;
+    return true;
+  }
     if (global::text[global::ind] == ')')
     {
         global::lex.type = Close_brace;
@@ -85,6 +111,14 @@ bool getLex()
         ++global::ind;
         return true;
     }
+  if (global::text[global::ind] == ']')
+  {
+    global::lex.type = Close_square_brace;
+    global::lex.name = "]";
+    global::lex.num = global::string_number;
+    ++global::ind;
+    return true;
+  }
     if (global::text[global::ind] == '{')
     {
         global::lex.type = Open_curly_brace;
@@ -115,8 +149,31 @@ bool getLex()
         global::lex.num = global::string_number;
         return true;
     }
+    if(global::text[global::ind] == '|' || global::text[global::ind] == '&' )
+    {
+        cur_lex.push_back(global::text[global::ind]);
+        ++global::ind;
+        if(global::ind < global::text.size() && global::text[global::ind] == global::text[global::ind - 1])
+        {
+            cur_lex.push_back(global::text[global::ind]);
+            ++global::ind;
+        }
+        global::lex.type = Operator;
+        global::lex.name = cur_lex;
+        global::lex.num = global::string_number;
+        return true;
+    }
+    if(global::text[global::ind] == '!' || global::text[global::ind] == '~')
+    {
+        cur_lex.push_back(global::text[global::ind]);
+        ++global::ind;
+        global::lex.type = Operator;
+        global::lex.name = cur_lex;
+        global::lex.num = global::string_number;
+        return true;
+    }
     if (global::text[global::ind] == '*' || global::text[global::ind] == '/' || global::text[global::ind] == '%' ||
-        global::text[global::ind] == '|' || global::text[global::ind] == '&' || global::text[global::ind] == '^')
+        global::text[global::ind] == '^')
     {
         cur_lex.push_back(global::text[global::ind]);
         global::lex.type = Operator;

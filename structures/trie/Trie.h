@@ -31,7 +31,7 @@ private:
         bool is_terminate_;
 
         TrieNode() : is_terminate_(false) {}
-        static void kill(TrieNode* v);
+        static void deleteSubtree(TrieNode* v);
     };
 
     TrieNode* root_;
