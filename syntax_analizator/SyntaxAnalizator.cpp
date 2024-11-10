@@ -299,20 +299,24 @@ void switch_() {
 }
 void variables_declaration_() {
   if (global::lex.type == LexemeType::Type) {
-    getLex();
-    while (global::lex.type != LexemeType::Semicolon) {
-      if (global::lex.type == LexemeType::Identificator) {
-        getLex();
-        if (global::lex.type == LexemeType::Comma) {
+    if (global::lex.name == "array"){
+      //TODO НАПИСАТЬ задание размера массиву
+    } else {
+      getLex();
+      while (global::lex.type != LexemeType::Semicolon) {
+        if (global::lex.type == LexemeType::Identificator) {
           getLex();
-        } else if (global::lex.name == "=") {
-          getLex();
-          expression_();
-        } else if (global::lex.type != LexemeType::Semicolon) {
-          throw SyntaxError((std::string("Expected '=' or ',' ") + std::to_string(global::lex.num)).c_str());
+          if (global::lex.type == LexemeType::Comma) {
+            getLex();
+          } else if (global::lex.name == "=") {
+            getLex();
+            expression_();
+          } else if (global::lex.type != LexemeType::Semicolon) {
+            throw SyntaxError((std::string("Expected '=' or ',' ") + std::to_string(global::lex.num)).c_str());
+          }
+        } else {
+          throw SyntaxError((std::string("Expected 'identificator' ") + std::to_string(global::lex.num)).c_str());
         }
-      } else {
-        throw SyntaxError((std::string("Expected 'identificator' ") + std::to_string(global::lex.num)).c_str());
       }
     }
   } else {
