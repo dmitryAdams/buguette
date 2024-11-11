@@ -19,6 +19,9 @@ void starter()
         program.push_back(c[i]);
     }
     global::text = program;
+//    while(!global::text.empty() && global::text.back() == ' ' || global::text.back() == '\n'){
+//      global::text.pop_back();
+//    }
     std::ifstream service_words_in("../sources/services_words"),
                   types_in("../sources/types");
     std::string word;

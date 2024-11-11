@@ -11,16 +11,16 @@ void program_() {
       if (global::lex.type == LexemeType::Semicolon) {
         getLex();
       } else {
-        throw SyntaxError((std::string("Expected ';' ") + std::to_string(global::lex.num)).c_str());
+        throw SyntaxError((std::string("Expected ';' ") + std::to_string(global::lex.num + 1)));
       }
     } else {
       break;
     }
   }
-  if (global::lex.name == "main") {
+  if (global::lex.type == LexemeType::Main) {
     main_();
   } else {
-    throw SyntaxError("No main in programm");
+    throw SyntaxError("No main in program");
   }
   while (!global::eof) {
     if (global::lex.name == "def") {
@@ -30,10 +30,10 @@ void program_() {
       if (global::lex.type == LexemeType::Semicolon) {
         getLex();
       } else {
-        throw SyntaxError((std::string("Expected ';' ") + std::to_string(global::lex.num)).c_str());
+        throw SyntaxError((std::string("Expected ';' ") + std::to_string(global::lex.num + 1)));
       }
     } else {
-      auto tmp = (std::string("Expected function or variable definition") + std::to_string(global::lex.num)).c_str();
+      auto tmp = (std::string("Expected function or variable definition" ) + std::to_string(global::lex.num + 1));
       throw SyntaxError(tmp);
     }
   }
@@ -52,16 +52,16 @@ void main_() {
           if (global::lex.name == "}") {
             getLex();
           } else {
-            throw SyntaxError((std::string("Expected '}' ") + std::to_string(global::lex.num)).c_str());
+            throw SyntaxError((std::string("Expected '}' ") + std::to_string(global::lex.num + 1)));
           }
         } else {
-          throw SyntaxError((std::string("Expected '{' ") + std::to_string(global::lex.num)).c_str());
+          throw SyntaxError((std::string("Expected '{' ") + std::to_string(global::lex.num + 1)));
         }
       } else {
-        throw SyntaxError((std::string("Expected ')' ") + std::to_string(global::lex.num)).c_str());
+        throw SyntaxError((std::string("Expected ')' ") + std::to_string(global::lex.num + 1)));
       }
     } else {
-      throw SyntaxError((std::string("Expected '(' ") + std::to_string(global::lex.num)).c_str());
+      throw SyntaxError((std::string("Expected '(' ") + std::to_string(global::lex.num + 1)));
     }
   }
 }
@@ -87,20 +87,20 @@ void function_() {
           if (global::lex.name == "}") {
             getLex();
           } else {
-            throw SyntaxError((std::string("Expected '}' ") + std::to_string(global::lex.num)).c_str());
+            throw SyntaxError((std::string("Expected '}' ") + std::to_string(global::lex.num + 1)));
           }
         } else {
-          throw SyntaxError((std::string("Expected '{' ") + std::to_string(global::lex.num)).c_str());
+          throw SyntaxError((std::string("Expected '{' ") + std::to_string(global::lex.num + 1)));
         }
       } else {
-        throw SyntaxError((std::string("Expected ')' ") + std::to_string(global::lex.num)).c_str());
+        throw SyntaxError((std::string("Expected ')' ") + std::to_string(global::lex.num + 1)));
       }
     } else {
-      throw SyntaxError((std::string("Expected '(' ") + std::to_string(global::lex.num)).c_str());
+      throw SyntaxError((std::string("Expected '(' ") + std::to_string(global::lex.num + 1)));
     }
 
   } else {
-    throw SyntaxError((std::string("Expected 'def' ") + std::to_string(global::lex.num)).c_str());
+    throw SyntaxError((std::string("Expected 'def' ") + std::to_string(global::lex.num + 1)));
   }
 }
 
@@ -108,7 +108,7 @@ void type_() {
   if (global::lex.type == LexemeType::Type) {
     getLex();
   } else {
-    throw SyntaxError((std::string("Expected 'type' ") + std::to_string(global::lex.num)).c_str());
+    throw SyntaxError((std::string("Expected 'type' ") + std::to_string(global::lex.num + 1)));
   }
 }
 
@@ -116,7 +116,7 @@ void identificator_() {
   if (global::lex.type == LexemeType::Identificator) {
     getLex();
   } else {
-    throw SyntaxError((std::string("Expected 'Identificator' ") + std::to_string(global::lex.num)).c_str());
+    throw SyntaxError((std::string("Expected 'Identificator' ") + std::to_string(global::lex.num + 1)));
   }
 }
 
@@ -145,13 +145,15 @@ void operator_() {
         return_();
       } else if (global::lex.name == "print") {
         print_();
+      } else {
+        throw SyntaxError(std::string("Expected operator ") + std::to_string(global::lex.num + 1));
       }
       break;
     case LexemeType::Type:variables_declaration_();
       if (global::lex.type == LexemeType::Semicolon) {
         getLex();
       } else {
-        throw SyntaxError((std::string("Expected ';' ") + std::to_string(global::lex.num)).c_str());
+        throw SyntaxError((std::string("Expected ';' ") + std::to_string(global::lex.num + 1)));
       }
       break;
     default:
@@ -159,7 +161,7 @@ void operator_() {
       if (global::lex.type == LexemeType::Semicolon) {
         getLex();
       } else {
-        throw SyntaxError((std::string("Expected ';' ") + std::to_string(global::lex.num)).c_str());
+        throw SyntaxError((std::string("Expected ';' ") + std::to_string(global::lex.num + 1)));
       }
   }
 }
@@ -170,10 +172,10 @@ void return_() {
     if (global::lex.type == LexemeType::Semicolon) {
       getLex();
     } else {
-      throw SyntaxError((std::string("Expected ';' ") + std::to_string(global::lex.num)).c_str());
+      throw SyntaxError((std::string("Expected ';' ") + std::to_string(global::lex.num + 1)));
     }
   } else {
-    throw SyntaxError((std::string("Expected 'return' ") + std::to_string(global::lex.num)).c_str());
+    throw SyntaxError((std::string("Expected 'return' ") + std::to_string(global::lex.num + 1)));
   }
 }
 void block_() {
@@ -185,6 +187,7 @@ void if_() {
   if (global::lex.name == "if") {
     getLex();
     if (global::lex.type == LexemeType::Open_brace) {
+      getLex();
       expression_();
       if (global::lex.type == LexemeType::Close_brace) {
         getLex();
@@ -194,13 +197,13 @@ void if_() {
           operator_();
         }
       } else {
-        throw SyntaxError((std::string("Expected ')' ") + std::to_string(global::lex.num)).c_str());
+        throw SyntaxError((std::string("Expected ')' ") + std::to_string(global::lex.num + 1)));
       }
     } else {
-      throw SyntaxError((std::string("Expected '(' ") + std::to_string(global::lex.num)).c_str());
+      throw SyntaxError((std::string("Expected '(' ") + std::to_string(global::lex.num + 1)));
     }
   } else {
-    throw SyntaxError((std::string("Expected 'if' ") + std::to_string(global::lex.num)).c_str());
+    throw SyntaxError((std::string("Expected 'if' ") + std::to_string(global::lex.num + 1)));
   }
 }
 void for_() {
@@ -216,36 +219,38 @@ void for_() {
           getLex();
           expression_();
           if (global::lex.type == LexemeType::Close_brace) {
+            getLex();
             operator_();
           } else {
-            throw SyntaxError((std::string("Expected ')' ") + std::to_string(global::lex.num)).c_str());
+            throw SyntaxError((std::string("Expected ')' ") + std::to_string(global::lex.num + 1)));
           }
         } else {
-          throw SyntaxError((std::string("Expected ';' ") + std::to_string(global::lex.num)).c_str());
+          throw SyntaxError((std::string("Expected ';' ") + std::to_string(global::lex.num + 1)));
         }
       } else {
-        throw SyntaxError((std::string("Expected ';' ") + std::to_string(global::lex.num)).c_str());
+        throw SyntaxError((std::string("Expected ';' ") + std::to_string(global::lex.num + 1)));
       }
     } else {
-      throw SyntaxError((std::string("Expected '(' ") + std::to_string(global::lex.num)).c_str());
+      throw SyntaxError((std::string("Expected '(' ") + std::to_string(global::lex.num + 1)));
     }
   } else {
-    throw SyntaxError((std::string("Expected 'for' ") + std::to_string(global::lex.num)).c_str());
+    throw SyntaxError((std::string("Expected 'for' ") + std::to_string(global::lex.num + 1)));
   }
 }
 void while_() {
   if (global::lex.name == "while") {
     getLex();
     if (global::lex.type == LexemeType::Open_brace) {
+      getLex();
       expression_();
       if (global::lex.type == LexemeType::Close_brace) {
         getLex();
         operator_();
       } else {
-        throw SyntaxError((std::string("Expected ')' ") + std::to_string(global::lex.num)).c_str());
+        throw SyntaxError((std::string("Expected ')' ") + std::to_string(global::lex.num + 1)));
       }
     } else {
-      throw SyntaxError((std::string("Expected '(' ") + std::to_string(global::lex.num)).c_str());
+      throw SyntaxError((std::string("Expected '(' ") + std::to_string(global::lex.num + 1)));
     }
   }
 }
@@ -253,54 +258,89 @@ void switch_() {
   if (global::lex.name == "switch") {
     getLex();
     if (global::lex.type == LexemeType::Open_brace) {
+      getLex();
       expression_();
       if (global::lex.type == LexemeType::Close_brace) {
         getLex();
-        operator_();
         if (global::lex.type == LexemeType::Open_curly_brace) {
           getLex();
           int cnt = 0;
           while (global::lex.name == "case") {
             getLex();
             if (global::lex.type == LexemeType::Open_brace) {
+              getLex();
               if (global::lex.type == LexemeType::Literal || global::lex.type == LexemeType::String_Literal) {
                 getLex();
                 if (global::lex.type == LexemeType::Close_brace) {
                   getLex();
                   operator_();
                 } else {
-                  throw SyntaxError((std::string("Expected ')' ") + std::to_string(global::lex.num)).c_str());
+                  throw SyntaxError((std::string("Expected ')' ") + std::to_string(global::lex.num + 1)));
                 }
               } else {
                 throw SyntaxError((std::string("Expected 'literal' or 'string literal' ")
-                    + std::to_string(global::lex.num)).c_str());
+                    + std::to_string(global::lex.num + 1)));
               }
             } else {
-              throw SyntaxError((std::string("Expected '(' ") + std::to_string(global::lex.num)).c_str());
+              throw SyntaxError((std::string("Expected '(' ") + std::to_string(global::lex.num + 1)));
             }
             ++cnt;
           }
-          if (cnt == 0) {
-            throw SyntaxError((std::string("Expected at least one case ") + std::to_string(global::lex.num)).c_str());
+          if (global::lex.name == "else"){
+            getLex();
+            operator_();
+          } else if (cnt == 0) {
+            throw SyntaxError((std::string("Expected at least one case ") + std::to_string(global::lex.num + 1)));
           }
-          //TODO Добавить else в switch
+          if (global::lex.type == LexemeType::Close_curly_brace){
+            getLex();
+          } else {
+            throw SyntaxError((std::string("Expected '}' ") + std::to_string(global::lex.num + 1)));
+          }
         } else {
-          throw SyntaxError((std::string("Expected '{' ") + std::to_string(global::lex.num)).c_str());
+          throw SyntaxError((std::string("Expected '{' ") + std::to_string(global::lex.num + 1)));
         }
       } else {
-        throw SyntaxError((std::string("Expected ')' ") + std::to_string(global::lex.num)).c_str());
+        throw SyntaxError((std::string("Expected ')' ") + std::to_string(global::lex.num + 1)));
       }
     } else {
-      throw SyntaxError((std::string("Expected '(' ") + std::to_string(global::lex.num)).c_str());
+      throw SyntaxError((std::string("Expected '(' ") + std::to_string(global::lex.num + 1)));
     }
   } else {
-    throw SyntaxError((std::string("Expected 'switch' ") + std::to_string(global::lex.num)).c_str());
+    throw SyntaxError((std::string("Expected 'switch' ") + std::to_string(global::lex.num + 1)));
   }
 }
 void variables_declaration_() {
   if (global::lex.type == LexemeType::Type) {
     if (global::lex.name == "array"){
-      //TODO НАПИСАТЬ задание размера массиву
+      getLex();
+      identificator_();
+      if(global::lex.type == LexemeType::Open_square_brace){
+        getLex();
+        expression_();
+        if (global::lex.type == LexemeType::Close_square_brace){
+          getLex();
+        } else {
+          throw SyntaxError((std::string("Expected ']' ") + std::to_string(global::lex.num + 1)));
+        }
+      } else {
+        throw SyntaxError((std::string("Expected '[' ") + std::to_string(global::lex.num + 1)));
+      }
+      while (global::lex.type == LexemeType::Comma){
+        getLex();
+        identificator_();
+        if(global::lex.type == LexemeType::Open_square_brace){
+          getLex();
+          expression_();
+          if (global::lex.type == LexemeType::Close_square_brace){
+            getLex();
+          } else {
+            throw SyntaxError((std::string("Expected ']' ") + std::to_string(global::lex.num + 1)));
+          }
+        } else {
+          throw SyntaxError((std::string("Expected '[' ") + std::to_string(global::lex.num + 1)));
+        }
+      }
     } else {
       getLex();
       while (global::lex.type != LexemeType::Semicolon) {
@@ -308,19 +348,25 @@ void variables_declaration_() {
           getLex();
           if (global::lex.type == LexemeType::Comma) {
             getLex();
+            continue;
           } else if (global::lex.name == "=") {
             getLex();
             expression_();
+            if (global::lex.type == LexemeType::Semicolon || global::lex.type == LexemeType::Comma) {
+              continue;
+            } else {
+              throw SyntaxError((std::string("Expected ';' ',' ") + std::to_string(global::lex.num + 1)));
+            }
           } else if (global::lex.type != LexemeType::Semicolon) {
-            throw SyntaxError((std::string("Expected '=' or ',' ") + std::to_string(global::lex.num)).c_str());
+            throw SyntaxError((std::string("Expected '=' or ',' ") + std::to_string(global::lex.num + 1)));
           }
         } else {
-          throw SyntaxError((std::string("Expected 'identificator' ") + std::to_string(global::lex.num)).c_str());
+          throw SyntaxError((std::string("Expected 'identificator' ") + std::to_string(global::lex.num + 1)));
         }
       }
     }
   } else {
-    throw SyntaxError((std::string("Expected 'type' ") + std::to_string(global::lex.num)).c_str());
+    throw SyntaxError((std::string("Expected 'type' ") + std::to_string(global::lex.num + 1)));
   }
 }
 void expression_() {
@@ -409,16 +455,16 @@ void expression_cool_() {
       if (global::lex.type == LexemeType::Close_brace) {
         getLex();
       } else {
-        throw SyntaxError((std::string("Expected ')' ") + std::to_string(global::lex.num)).c_str());
+        throw SyntaxError((std::string("Expected ')' ") + std::to_string(global::lex.num + 1)));
       }
     }
   } else if (global::lex.type == LexemeType::Open_brace) {
     getLex();
     expression_();
-    if (global::lex.type == LexemeType::Close_curly_brace) {
+    if (global::lex.type == LexemeType::Close_brace) {
       getLex();
     } else {
-      throw SyntaxError((std::string("Expected ')' ") + std::to_string(global::lex.num)).c_str());
+      throw SyntaxError((std::string("Expected ')' ") + std::to_string(global::lex.num + 1)));
     }
   } else if (global::lex.type == LexemeType::Open_square_brace) {
     getLex();
@@ -426,38 +472,10 @@ void expression_cool_() {
     if (global::lex.type == LexemeType::Close_square_brace) {
       getLex();
     } else {
-      throw SyntaxError((std::string("Expected ']' ") + std::to_string(global::lex.num)).c_str());
+      throw SyntaxError((std::string("Expected ']' ") + std::to_string(global::lex.num + 1)));
     }
   } else {
-    throw SyntaxError((std::string("Expected 'expression' ") + std::to_string(global::lex.num)).c_str());
-  }
-  while (global::lex.type == LexemeType::Literal ||
-      global::lex.type == LexemeType::Identificator ||
-      global::lex.type == LexemeType::Open_brace ||
-      global::lex.type == LexemeType::Open_square_brace) {
-    if (global::lex.type == LexemeType::Literal) {
-      getLex();
-    } else if (global::lex.type == LexemeType::Identificator) {
-      getLex();
-    } else if (global::lex.type == LexemeType::Open_brace) {
-      getLex();
-      expression_();
-      if (global::lex.type == LexemeType::Close_curly_brace) {
-        getLex();
-      } else {
-        throw SyntaxError((std::string("Expected ')' ") + std::to_string(global::lex.num)).c_str());
-      }
-    } else if (global::lex.type == LexemeType::Open_square_brace) {
-      getLex();
-      expression_();
-      if (global::lex.type == LexemeType::Close_square_brace) {
-        getLex();
-      } else {
-        throw SyntaxError((std::string("Expected ']' ") + std::to_string(global::lex.num)).c_str());
-      }
-    } else {
-      throw SyntaxError((std::string("Expected 'expression' ") + std::to_string(global::lex.num)).c_str());
-    }
+    throw SyntaxError((std::string("Expected 'expression' ") + std::to_string(global::lex.num + 1)));
   }
 }
 void function_call_() {
@@ -466,7 +484,7 @@ void function_call_() {
     if (global::lex.type == LexemeType::Comma) {
       getLex();
     } else if (global::lex.type != LexemeType::Close_brace) {
-      throw SyntaxError((std::string("Expected ',' or ')' ") + std::to_string(global::lex.num)).c_str());
+      throw SyntaxError((std::string("Expected ',' or ')' ") + std::to_string(global::lex.num + 1)));
     }
   }
 }
@@ -477,10 +495,10 @@ void break_() {
     if (global::lex.type == LexemeType::Semicolon) {
       getLex();
     } else {
-      throw SyntaxError((std::string("Expected ';' ") + std::to_string(global::lex.num)).c_str());
+      throw SyntaxError((std::string("Expected ';' ") + std::to_string(global::lex.num + 1)));
     }
   } else {
-    throw SyntaxError((std::string("Expected 'break' ") + std::to_string(global::lex.num)).c_str());
+    throw SyntaxError((std::string("Expected 'break' ") + std::to_string(global::lex.num + 1)));
   }
 }
 void continue_() {
@@ -489,10 +507,10 @@ void continue_() {
     if (global::lex.type == LexemeType::Semicolon) {
       getLex();
     } else {
-      throw SyntaxError((std::string("Expected ';' ") + std::to_string(global::lex.num)).c_str());
+      throw SyntaxError((std::string("Expected ';' ") + std::to_string(global::lex.num + 1)));
     }
   } else {
-    throw SyntaxError((std::string("Expected 'continue' ") + std::to_string(global::lex.num)).c_str());
+    throw SyntaxError((std::string("Expected 'continue' ") + std::to_string(global::lex.num + 1)));
   }
 }
 void pass_() {
@@ -501,10 +519,10 @@ void pass_() {
     if (global::lex.type == LexemeType::Semicolon) {
       getLex();
     } else {
-      throw SyntaxError((std::string("Expected ';' ") + std::to_string(global::lex.num)).c_str());
+      throw SyntaxError((std::string("Expected ';' ") + std::to_string(global::lex.num + 1)));
     }
   } else {
-    throw SyntaxError((std::string("Expected 'pass' ") + std::to_string(global::lex.num)).c_str());
+    throw SyntaxError((std::string("Expected 'pass' ") + std::to_string(global::lex.num + 1)));
   }
 }
 void print_() {
@@ -514,13 +532,13 @@ void literal_() {
   if (global::lex.type == LexemeType::Literal) {
     getLex();
   } else {
-    throw SyntaxError((std::string("Expected 'literal' ") + std::to_string(global::lex.num)).c_str());
+    throw SyntaxError((std::string("Expected 'literal' ") + std::to_string(global::lex.num + 1)));
   }
 }
 void string_literal_() {
   if (global::lex.type == LexemeType::String_Literal) {
     getLex();
   } else {
-    throw SyntaxError((std::string("Expected 'string literal' ") + std::to_string(global::lex.num)).c_str());
+    throw SyntaxError((std::string("Expected 'string literal' ") + std::to_string(global::lex.num + 1)));
   }
 }

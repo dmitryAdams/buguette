@@ -6,15 +6,16 @@
 #define BUGGUETTE_SYNTAX_ANALIZATOR_SYNTAX_ERROR_SYNTAXERROR_H_
 
 #include "exception"
+#include "string"
 
 class SyntaxError : public std::exception{
  public:
-  SyntaxError(const char *_str) : str(_str) {}
+  SyntaxError(const std::string& _str) : str(_str) {}
   const char* what() const noexcept override{
-    return str;
+    return str.c_str();
   }
  private:
-  const char *str;
+  std::string str;
 };
 
 #endif //BUGGUETTE_SYNTAX_ANALIZATOR_SYNTAX_ERROR_SYNTAXERROR_H_
