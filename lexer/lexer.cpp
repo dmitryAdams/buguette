@@ -4,13 +4,13 @@
 bool getLex() {
   std::string cur_lex;
   //TODO Напистаь комментарии
-  // if(global::text[global::ind] == '#')
-  // {
-  //     while (global::ind < global::text.size() && global::text[global::ind] != '\n')
-  //     {
-  //         ++global::ind;
-  //     }
-  // }
+//   if(global::text[global::ind] == '#')
+//   {
+//       while (global::ind < global::text.size() && global::text[global::ind] != '\n')
+//       {
+//           ++global::ind;
+//       }
+//   }
   while (global::ind < global::text.size() && global::text[global::ind] == ' ' || global::text[global::ind] == '\n') {
     global::string_number += global::text[global::ind] == '\n';
     ++global::ind;

@@ -36,6 +36,7 @@ void break_();
 void continue_();
 void pass_();
 void print_();
+void scan_();
 void literal_();
 void string_literal_();
 #endif //BUGGUETTE_SYNTAX_ANALIZATOR_SYNTAXANALIZATOR_H_
