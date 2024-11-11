@@ -28,3 +28,4 @@ int main() {
 //  std::cout << typeid(c).name() << ' ' << c <<  ' ' << (int)'o';
   return 0;
 }
+
