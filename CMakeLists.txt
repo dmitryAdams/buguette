@@ -15,5 +15,17 @@ add_executable(bugguette main.cpp
         syntax_analizator/SyntaxAnalizator.h
         syntax_analizator/syntax_error/SyntaxError.cpp
         syntax_analizator/syntax_error/SyntaxError.h
+        semantic_analizator/SemanticAnalizator.h
+        semantic_analizator/SemanticAnalizator.cpp
+        semantic_analizator/TID/variables_TID.cpp
+        semantic_analizator/TID/variables_TID.h
+        semantic_analizator/TID/Tree_variables_TID.cpp
+        semantic_analizator/TID/Tree_variables_TID.h
+        semantic_analizator/TID/Function_TID.cpp
+        semantic_analizator/TID/Function_TID.h
 )
+
+add_compile_definitions("")
+add_compile_definitions("DEBUG")
+
 

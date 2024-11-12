@@ -5,6 +5,8 @@
 
 #include "./structures/trie/Trie.h"
 #include "lexer/lexer.h"
+#include "semantic_analizator/TID/Tree_variables_TID.h"
+#include "semantic_analizator/TID/Function_TID.h"
 
 namespace global
 {
@@ -14,6 +16,8 @@ namespace global
     extern std::string text;
     extern int string_number;
     extern bool eof;
+    extern Tree_variables_TID tree_of_variables;
+    extern Function_TID function_table;
 };
 
 

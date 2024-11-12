@@ -1,3 +1,15 @@
+int g = 0;
+
+def int h(int a, int b, int c){
+    return g + a +b + c;
+}
+
 main(){
-    print("goida");
+    int h;
+    while(true) {
+        while(false){
+            int h;
+        }
+        int h;
+    }
 }

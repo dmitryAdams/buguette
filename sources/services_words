@@ -8,7 +8,9 @@ switch
 case
 pass
 return
-printq
+print
 scan
 def
 main
+true
+false

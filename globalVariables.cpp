@@ -8,4 +8,6 @@ namespace global
     std::string text;
     int string_number = 0;
     bool eof = false;
+    Tree_variables_TID tree_of_variables = Tree_variables_TID();
+    Function_TID function_table = Function_TID();
 };
