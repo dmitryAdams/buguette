@@ -9,7 +9,7 @@
 //  if (t == NULLLEXEME) return "NULLLEXEME";
 //  if (t == Identificator) return "Identificator";
 //  if (t == Service_word) return "Service_word";
-//  if (t == Type) return "Type";
+//  if (t == Type_) return "Type_";
 //  if (t == Literal) return "Literal";
 //  if (t == Operator) return "Operator";
 //  if (t == Comma) return "Comma";

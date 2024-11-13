@@ -7,7 +7,7 @@
 #include "../../lib.h"
 struct key {
   std::string name;
-  std::vector<std::string> types_of_args;
+  std::vector<Type_> types_of_args;
   friend bool operator<(const key &a, const key &b) {
     if (a.name == b.name) {
       return a.types_of_args < b.types_of_args;
@@ -24,7 +24,7 @@ class Function_TID {
   Function_TID() = default;
   void push_id(Types type,
                const std::string &name,
-               const std::vector<std::string> &args_types,
+               const std::vector<Type_> &args_types,
                const std::vector<std::string> &args_names) {
     if (tid.count({name, args_types})) {
       //TODO
@@ -33,7 +33,7 @@ class Function_TID {
     tid[{name, args_types}] = {type, args_names};
   }
   value check_id(const std::string &name,
-                 const std::vector<std::string> &args_types) {
+                 const std::vector<Type_> &args_types) {
     if (!tid.count({name, args_types})) {
       //TODO
       throw std::logic_error("funtion not declareted");
