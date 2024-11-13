@@ -10,7 +10,7 @@
 class variables_TID {
  public:
   variables_TID() = default;
-  enum Types{int_, float_, bool_, char_, array_, string_, NULLTYPE};
+
   bool addId(const std::string &name, Types type){
     if (tid.count(name)){
       return false;

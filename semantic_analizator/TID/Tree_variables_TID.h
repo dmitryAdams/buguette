@@ -25,35 +25,35 @@ class Tree_variables_TID {
 #endif
   }
   void push_id(const std::string &name, const std::string &type_){
-    variables_TID::Types type = variables_TID::NULLTYPE;
+    Types type = Types::NULLTYPE;
     if (type_ == "int"){
-      type = variables_TID::int_;
+      type = Types::int_;
     } else if (type_ == "char"){
-      type = variables_TID::char_;
+      type = Types::char_;
     } else if (type_ == "bool"){
-      type = variables_TID::bool_;
+      type = Types::bool_;
     } else if (type_ == "float"){
-      type = variables_TID::float_;
+      type = Types::float_;
     } else if (type_ == "string"){
-      type = variables_TID::string_;
+      type = Types::string_;
     } else if (type_ == "array"){
-      type = variables_TID::array_;
+      type = Types::array_;
     }
     if(!cur->tid.addId(name, type)){
       //TODO свои ошибки
       throw std::logic_error("multiply definition");
     }
   }
-  variables_TID::Types check_id(const std::string &name){
+  Types check_id(const std::string &name){
     auto now = cur;
     while (now != nullptr){
       auto tmp = now->tid.isInTID(name);
-      if (tmp != variables_TID::NULLTYPE){
+      if (tmp != Types::NULLTYPE){
         return tmp;
       }
       now = now->pred;
     }
-    return variables_TID::NULLTYPE;
+    return Types::NULLTYPE;
   }
  private:
   struct Node{

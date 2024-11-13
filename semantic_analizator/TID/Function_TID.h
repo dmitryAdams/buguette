@@ -16,13 +16,13 @@ struct key {
   }
 };
 struct value {
-  std::string type_of_return;
+  Types type_of_return;
   std::vector<std::string> names_of_args;
 };
 class Function_TID {
  public:
   Function_TID() = default;
-  void push_id(const std::string &type,
+  void push_id(Types type,
                const std::string &name,
                const std::vector<std::string> &args_types,
                const std::vector<std::string> &args_names) {
