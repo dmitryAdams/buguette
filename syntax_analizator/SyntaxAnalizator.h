@@ -12,7 +12,7 @@ void function_();
 void type_();
 void identificator_();
 void operator_();
-void return_();
+Type_ return_();
 void block_();
 void if_();
 void for_();

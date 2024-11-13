@@ -10,4 +10,6 @@ namespace global
     bool eof = false;
     Tree_variables_TID tree_of_variables = Tree_variables_TID();
     Function_TID function_table = Function_TID();
+    std::multiset<std::string> opened_operators = std::multiset<std::string>();
+    std::vector<Type_> stack_of_call = std::vector<Type_>();
 };

@@ -23,6 +23,8 @@ add_executable(bugguette main.cpp
         semantic_analizator/TID/Tree_variables_TID.h
         semantic_analizator/TID/Function_TID.cpp
         semantic_analizator/TID/Function_TID.h
+        semantic_analizator/SemanticError/SemanticError.cpp
+        semantic_analizator/SemanticError/SemanticError.h
 )
 
 add_compile_definitions("")

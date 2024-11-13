@@ -5,6 +5,7 @@
 #ifndef BUGGUETTE_SEMANTIC_ANALIZATOR_TID_TREE_VARIABLES_TID_H_
 #define BUGGUETTE_SEMANTIC_ANALIZATOR_TID_TREE_VARIABLES_TID_H_
 #include "variables_TID.h"
+#include "../SemanticError/SemanticError.h"
 class Tree_variables_TID {
  public:
   Tree_variables_TID(){
@@ -40,8 +41,7 @@ class Tree_variables_TID {
       type = Types::array_;
     }
     if(!cur->tid.addId(name, type)){
-      //TODO свои ошибки
-      throw std::logic_error("multiply definition");
+      throw SemanticError("multiply definition of var with name: " + name);
     }
   }
   Types check_id(const std::string &name){

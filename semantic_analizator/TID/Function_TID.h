@@ -5,6 +5,7 @@
 #ifndef BUGGUETTE_SEMANTIC_ANALIZATOR_TID_FUNCTION_TID_H_
 #define BUGGUETTE_SEMANTIC_ANALIZATOR_TID_FUNCTION_TID_H_
 #include "../../lib.h"
+#include "../SemanticError/SemanticError.h"
 struct key {
   std::string name;
   std::vector<Type_> types_of_args;
@@ -28,7 +29,7 @@ class Function_TID {
                const std::vector<std::string> &args_names) {
     if (tid.count({name, args_types})) {
       //TODO
-      throw std::logic_error("multiply function");
+      throw SemanticError("multiply definition of function " + name);
     }
     tid[{name, args_types}] = {type, args_names};
   }
@@ -36,12 +37,33 @@ class Function_TID {
                  const std::vector<Type_> &args_types) {
     if (!tid.count({name, args_types})) {
       //TODO
-      throw std::logic_error("funtion not declareted");
+      std::string error = "function with name: " + name + ", and args types: ";
+      for(auto i : args_types){
+        error += string_by_type(i);
+        error += " ";
+      }
+      throw SemanticError(error + " doesn't exist");
     }
     return tid[{name, args_types}];
   }
  private:
-
+  std::string string_by_type(Type_ t){
+    if(t.t == int_){
+      return "int";
+    } else if (t.t == float_){
+      return "float";
+    } else if (t.t == bool_){
+      return "bool";
+    } else if (t.t == char_){
+      return "char";
+    } else if (t.t == array_){
+      return "array";
+    } else if (t.t == string_){
+      return "string";
+    } else {
+      throw std::logic_error("working error unexpected type");
+    }
+  }
   std::map<key, value> tid;
 };
 

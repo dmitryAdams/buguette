@@ -21,9 +21,18 @@
 //  if (t == String_Literal) return "String_Literal";
 //}
 #include "./syntax_analizator/SyntaxAnalizator.h"
+#include "./syntax_analizator/syntax_error/SyntaxError.h"
+#include "./semantic_analizator/SemanticError/SemanticError.h"
+
 int main() {
-  starter();
-  program_();
+  try{
+    starter();
+    program_();
+  }catch (SyntaxError &e){
+    std::cout << e.what() << '\n';
+  }catch (SemanticError &e){
+    std::cout << e.what() << '\n';
+  }
 //  auto c = 'ok';
 //  std::cout << typeid(c).name() << ' ' << c <<  ' ' << (int)'o';
   return 0;
