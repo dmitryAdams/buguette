@@ -1,3 +1,4 @@
+#include <algorithm>
 #include "SyntaxAnalizator.h"
 #include "./syntax_error/SyntaxError.h"
 #include "../lib.h"
@@ -550,17 +551,21 @@ Type_ expression4_() {
 Type_ expression3_() {
   auto lhs = expression2_();
   while (global::lex.name == "+" || global::lex.name == "-") {
+    bool is_plus = global::lex.name == "+";
     getLex();
     auto rhs = expression2_();
-    if (lhs.t != rhs.t) {
-
-      throw SyntaxError("different types in +  in line: " + std::to_string(global::lex.num + 1));
+    if (is_plus && lhs.t == Types::string_ && rhs.t == Types::string_){
+      lhs.is_lvalue = false;
+      continue;
     }
-    if (lhs.t != Types::int_ && lhs.t != Types::float_) {
-
-      throw SyntaxError("+ -overloaded only for int and float  in line: " + std::to_string(global::lex.num + 1));
+//    if (lhs.t != rhs.t) {
+//
+//      throw SyntaxError("different types in +  in line: " + std::to_string(global::lex.num + 1));
+//    }
+    if ((lhs.t != Types::int_ && lhs.t != Types::float_) || (rhs.t != Types::int_ && rhs.t != Types::float_)) {
+      throw SyntaxError("'-' overloaded only for int and float  in line: " + std::to_string(global::lex.num + 1));
     }
-    lhs = rhs;
+    if(lhs.t != Types::float_)lhs = rhs;
     lhs.is_lvalue = false;
   }
   return lhs;
@@ -570,52 +575,84 @@ Type_ expression2_() {
   while (global::lex.name == "*" || global::lex.name == "/" || global::lex.name == "%") {
     getLex();
     auto rhs = expression1_();
-    if (lhs.t != rhs.t) {
-
-      throw SyntaxError("different types in +  in line: " + std::to_string(global::lex.num + 1));
-    }
-    if (lhs.t != Types::int_ && lhs.t != Types::float_) {
-
+//    if (lhs.t != rhs.t) {
+//
+//      throw SyntaxError("different types in +  in line: " + std::to_string(global::lex.num + 1));
+//    }
+    if ((lhs.t != Types::int_ && lhs.t != Types::float_) || (rhs.t != Types::int_ && rhs.t != Types::float_)) {
       throw SyntaxError("* / % overloaded only for int and float  in line: " + std::to_string(global::lex.num + 1));
     }
-    lhs = rhs;
+
+    if(lhs.t != Types::float_)lhs = rhs;
     lhs.is_lvalue = false;
   }
   return lhs;
 }
 Type_ expression1_() {
-  auto operat = global::lex;
-  if (global::lex.name == "+" || global::lex.name == "-" || global::lex.name == "++" || global::lex.name == "--"
+//  auto operat = global::lex;
+  std::vector<lexeme> unary_operators;
+  while (global::lex.name == "+" || global::lex.name == "-" || global::lex.name == "++" || global::lex.name == "--"
       || global::lex.name == "!") {
+    unary_operators.push_back(global::lex);
     getLex();
   }
   auto lhs = expression_cool_();
-  if (operat.name == "+" || operat.name == "-") {
+  while (!unary_operators.empty()){
+    auto operat = unary_operators.back();
+    if (operat.name == "+" || operat.name == "-") {
     if (lhs.t != Types::int_ && lhs.t != Types::float_) {
 
       throw SyntaxError("unary + - overloaded only for int and float  in line: " + std::to_string(global::lex.num + 1));
     }
     lhs.is_lvalue = false;
-    return lhs;
+//    return lhs;
   } else if (operat.name == "++" || operat.name == "--") {
-    if (lhs.t != Types::int_) {
+    if (lhs.t != Types::int_ && lhs.t != Types::float_) {
 
       throw SyntaxError("++ -- overloaded only for int  in line: " + std::to_string(global::lex.num + 1));
     }
     if (!lhs.is_lvalue) {
       throw SyntaxError("++ -- overloaded only for lvalue int  in line: " + std::to_string(global::lex.num + 1));
     }
-    return lhs;
+//    return lhs;
   } else if (operat.name == "!") {
     if (lhs.t != Types::bool_) {
-
       throw SyntaxError("! overloaded only for bool" +std::string(" in line: ") + std::to_string(global::lex.num + 1));
     }
     lhs.is_lvalue = false;
-    return lhs;
+//    return lhs;
   } else {
-    return lhs;
+//    return lhs;
   }
+    unary_operators.pop_back();
+  }
+  return lhs;
+//  if (operat.name == "+" || operat.name == "-") {
+//    if (lhs.t != Types::int_ && lhs.t != Types::float_) {
+//
+//      throw SyntaxError("unary + - overloaded only for int and float  in line: " + std::to_string(global::lex.num + 1));
+//    }
+//    lhs.is_lvalue = false;
+//    return lhs;
+//  } else if (operat.name == "++" || operat.name == "--") {
+//    if (lhs.t != Types::int_) {
+//
+//      throw SyntaxError("++ -- overloaded only for int  in line: " + std::to_string(global::lex.num + 1));
+//    }
+//    if (!lhs.is_lvalue) {
+//      throw SyntaxError("++ -- overloaded only for lvalue int  in line: " + std::to_string(global::lex.num + 1));
+//    }
+//    return lhs;
+//  } else if (operat.name == "!") {
+//    if (lhs.t != Types::bool_) {
+//
+//      throw SyntaxError("! overloaded only for bool" +std::string(" in line: ") + std::to_string(global::lex.num + 1));
+//    }
+//    lhs.is_lvalue = false;
+//    return lhs;
+//  } else {
+//    return lhs;
+//  }
 }
 
 Type_ expression_cool_() {
@@ -629,8 +666,12 @@ Type_ expression_cool_() {
     getLex();
     return {Types::string_, false};
   } else if (global::lex.type == LexemeType::Literal) {
+    auto tp = Types::int_;
+    if (std::count(global::lex.name.begin(), global::lex.name.end(), '.')){
+      tp = Types::float_;
+    }
     getLex();
-    return {Types::int_, false};
+    return {tp, false};
   } else if (global::lex.type == LexemeType::Identificator) {
     auto cur_lex = global::lex;
     identificator_();
@@ -643,6 +684,17 @@ Type_ expression_cool_() {
         throw SyntaxError((std::string("Expected ')' ") + std::to_string(global::lex.num + 1)));
       }
       return {global::function_table.check_id(cur_lex.name, args_types).type_of_return, false};
+    } else if(global::lex.type == LexemeType::Open_square_brace){
+      if(global::tree_of_variables.check_id(cur_lex.name) != Types::array_){
+        throw SyntaxError(cur_lex.name + "aren't an array in line: " + std::to_string(cur_lex.num + 1));
+      }
+      getLex();
+      auto ans = expression_();
+      if (global::lex.type != LexemeType::Close_square_brace){
+        throw SyntaxError("Expected '] in line: " + std::to_string(global::lex.num + 1));
+      }
+      getLex();
+      return {Types::int_, true};
     } else {
       if (global::tree_of_variables.check_id(cur_lex.name) == Types::NULLTYPE) {
         throw SyntaxError("No var " + cur_lex.name + " in this scope" +std::string(" in line: ") + std::to_string(global::lex.num + 1));
@@ -669,7 +721,10 @@ Type_ expression_cool_() {
     }
     return lhs;
   } else {
-    throw SyntaxError((std::string("Expected 'expression' ") + std::to_string(global::lex.num + 1)));
+    //TODO возможно экспрешены не ловят ошибки
+    throw SyntaxError((std::string("Expected identificator, literal, braces or function call or some another primitive ") + std::to_string(global::lex.num + 1)));
+    return expression_();
+//    throw SyntaxError((std::string("Expected 'expression' ") + std::to_string(global::lex.num + 1)));
   }
 }
 std::vector<Type_> function_call_() {

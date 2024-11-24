@@ -1,24 +1,44 @@
-int g = 0;
 
-string nice = "goida";
-array d[500];
+array a[1000];
 
-bool flag = true;
 
-def bool check(int n, int u) {
-    int d;
-    if (n == g) return false;
-}
-def bool check(int k, bool g) {
-    int d;
-    return false;
+def int col(float left, int r, int x, string t) {
+    int ans = 0;
+    for (int i = left; i < r; ++i) {
+        if (a[i] == i) "iuiughigtuyu";
+    }
+    return ans;
 }
 
 
 main() {
+    "aaa" + "bbb";
     int n;
     scan(n);
-    int m = n + 1;
-    string s = "aboba";
-    print(check(m + 0, 6));
+    scan(a);
+
+    int q;
+    scan(q);
+
+    while (--(--q), q >= 0) {
+        char c;
+        scan(c);
+        switch(c) {
+            case("+") {
+                int b, ind;
+                scan(b);
+                scan(ind);
+                a[ind] = b;
+            }
+            case("?") {
+                int left, r, x;
+                scan(left);
+                scan(r);
+                scan(x);
+                print("goida: ");
+                print(col(left +0.0, r, x, "str"));
+                print("\n");
+            }
+        }
+    }
 }

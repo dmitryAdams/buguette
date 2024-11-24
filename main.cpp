@@ -25,14 +25,17 @@
 #include "./semantic_analizator/SemanticError/SemanticError.h"
 
 int main() {
-  try{
+  float a = 0;
+  ++a;
+//  try{
     starter();
     program_();
-  }catch (SyntaxError &e){
-    std::cout << e.what() << '\n';
-  }catch (SemanticError &e){
-    std::cout << e.what() << '\n';
-  }
+//  }
+//  catch (SyntaxError &e){
+//    std::cout << e.what() << '\n';
+//  }catch (SemanticError &e){
+//    std::cout << e.what() << '\n';
+//  }
 //  auto c = 'ok';
 //  std::cout << typeid(c).name() << ' ' << c <<  ' ' << (int)'o';
   return 0;
