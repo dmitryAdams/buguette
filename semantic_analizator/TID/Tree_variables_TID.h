@@ -44,6 +44,12 @@ class Tree_variables_TID {
       throw SemanticError("multiply definition of var with name: " + name);
     }
   }
+  void push_id(const std::string &name, Types &type_){
+    Types type = type_;
+    if(!cur->tid.addId(name, type)){
+      throw SemanticError("multiply definition of var with name: " + name);
+    }
+  }
   Types check_id(const std::string &name){
     auto now = cur;
     while (now != nullptr){
