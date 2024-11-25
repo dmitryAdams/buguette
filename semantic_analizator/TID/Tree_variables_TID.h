@@ -26,40 +26,40 @@ class Tree_variables_TID {
 #endif
   }
   void push_id(const std::string &name, const std::string &type_){
-    Types type = Types::NULLTYPE;
+    K_Variable_Type type = K_Variable_Type::K_Variable_Type_NULLTYPE;
     if (type_ == "int"){
-      type = Types::int_;
+      type = K_Variable_Type::K_Variable_Type_Int;
     } else if (type_ == "char"){
-      type = Types::char_;
+      type = K_Variable_Type::K_Variable_Type_Char;
     } else if (type_ == "bool"){
-      type = Types::bool_;
+      type = K_Variable_Type::K_Variable_Type_Bool;
     } else if (type_ == "float"){
-      type = Types::float_;
+      type = K_Variable_Type::K_Variable_Type_Float;
     } else if (type_ == "string"){
-      type = Types::string_;
+      type = K_Variable_Type::K_Variable_Type_String;
     } else if (type_ == "array"){
-      type = Types::array_;
+      type = K_Variable_Type::K_Variable_Type_Array;
     }
     if(!cur->tid.addId(name, type)){
       throw SemanticError("multiply definition of var with name: " + name);
     }
   }
-  void push_id(const std::string &name, Types &type_){
-    Types type = type_;
+  void push_id(const std::string &name, K_Variable_Type &type_){
+    K_Variable_Type type = type_;
     if(!cur->tid.addId(name, type)){
       throw SemanticError("multiply definition of var with name: " + name);
     }
   }
-  Types check_id(const std::string &name){
+  K_Variable_Type check_id(const std::string &name){
     auto now = cur;
     while (now != nullptr){
       auto tmp = now->tid.isInTID(name);
-      if (tmp != Types::NULLTYPE){
+      if (tmp != K_Variable_Type::K_Variable_Type_NULLTYPE){
         return tmp;
       }
       now = now->pred;
     }
-    return Types::NULLTYPE;
+    return K_Variable_Type::K_Variable_Type_NULLTYPE;
   }
  private:
   struct Node{

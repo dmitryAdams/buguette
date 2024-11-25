@@ -9,9 +9,9 @@
 //  if (t == NULLLEXEME) return "NULLLEXEME";
 //  if (t == Identificator) return "Identificator";
 //  if (t == Service_word) return "Service_word";
-//  if (t == Type_) return "Type_";
+//  if (t == Expression_Type) return "Expression_Type";
 //  if (t == Literal) return "Literal";
-//  if (t == Operator) return "Operator";
+//  if (t == PolizOperator) return "PolizOperator";
 //  if (t == Comma) return "Comma";
 //  if (t == Semicolon) return "Semicolon";
 //  if (t == Open_brace) return "Open_brace";
@@ -23,10 +23,7 @@
 #include "./syntax_analizator/SyntaxAnalizator.h"
 #include "./syntax_analizator/syntax_error/SyntaxError.h"
 #include "./semantic_analizator/SemanticError/SemanticError.h"
-
 int main() {
-  float a = 0;
-  ++a;
 //  try{
     starter();
     program_();

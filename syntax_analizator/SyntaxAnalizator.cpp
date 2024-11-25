@@ -2,19 +2,19 @@
 #include "SyntaxAnalizator.h"
 #include "./syntax_error/SyntaxError.h"
 #include "../lib.h"
-Types type_by_name(const std::string &type_name) {
+K_Variable_Type type_by_name(const std::string &type_name) {
   if (type_name == "int") {
-    return Types::int_;
+    return K_Variable_Type::K_Variable_Type_Int;
   } else if (type_name == "float") {
-    return Types::float_;
+    return K_Variable_Type::K_Variable_Type_Float;
   } else if (type_name == "string") {
-    return Types::string_;
+    return K_Variable_Type::K_Variable_Type_String;
   } else if (type_name == "array") {
-    return Types::array_;
+    return K_Variable_Type::K_Variable_Type_Array;
   } else if (type_name == "char") {
-    return Types::char_;
+    return K_Variable_Type::K_Variable_Type_Char;
   } else if (type_name == "bool") {
-    return Types::bool_;
+    return K_Variable_Type::K_Variable_Type_Bool;
   } else {
     auto tmp = "unexpected type in type_by_name()" + std::to_string(global::lex.num + 1);
     throw SyntaxError(tmp);
@@ -98,7 +98,7 @@ void function_() {
     global::tree_of_variables.create_scope();
     if (global::lex.type == LexemeType::Open_brace) {
       getLex();
-      std::vector<Type_> args_types;
+      std::vector<Expression_Type> args_types;
       std::vector<std::string> args_names;
       if (global::lex.type != LexemeType::Close_brace) {
         auto cur_type = global::lex;
@@ -239,7 +239,7 @@ void operator_() {
       }
   }
 }
-Type_ return_() {
+Expression_Type return_() {
   if (global::lex.name == "return") {
     getLex();
     auto ans = expression_();
@@ -405,7 +405,9 @@ void variables_declaration_() {
       }
       while (global::lex.type == LexemeType::Comma) {
         getLex();
+        cur_lex = global::lex;
         identificator_();
+        global::tree_of_variables.push_id(cur_lex.name, "array");
         if (global::lex.type == LexemeType::Open_square_brace) {
           getLex();
           expression_();
@@ -424,22 +426,22 @@ void variables_declaration_() {
       auto cur_id = global::lex;
       identificator_();
       global::tree_of_variables.push_id(cur_id.name, cur_type.name);
-      if (global::lex.name == "="){
+      if (global::lex.name == "=") {
         getLex();
         auto rhs = expression9_();
-        if (type_by_name(cur_type.name) != rhs.t){
+        if (type_by_name(cur_type.name) != rhs.t) {
           throw SyntaxError("Incorrect type in variable declaration in line: " + std::to_string(cur_id.num + 1));
         }
       }
       while (global::lex.type == LexemeType::Comma) {
         getLex();
-        auto cur_id = global::lex;
+        cur_id = global::lex;
         identificator_();
         global::tree_of_variables.push_id(cur_id.name, cur_type.name);
-        if (global::lex.name == "="){
+        if (global::lex.name == "=") {
           getLex();
           auto rhs = expression9_();
-          if (type_by_name(cur_type.name) != rhs.t){
+          if (type_by_name(cur_type.name) != rhs.t) {
             throw SyntaxError("Incorrect type in variable declaration in line: " + std::to_string(cur_id.num + 1));
           }
         }
@@ -466,10 +468,10 @@ void variables_declaration_() {
     throw SyntaxError((std::string("Expected 'type' ") + std::to_string(global::lex.num + 1)));
   }
 }
-Type_ expression_() {
+Expression_Type expression_() {
   return expression10_();
 }
-Type_ expression10_() {
+Expression_Type expression10_() {
   auto lhs = expression9_();
   while (global::lex.name == ",") {
     getLex();
@@ -477,7 +479,7 @@ Type_ expression10_() {
   }
   return lhs;
 }
-Type_ expression9_() {
+Expression_Type expression9_() {
   auto lhs = expression8_();
   while (global::lex.name == "=") {
     getLex();
@@ -491,15 +493,15 @@ Type_ expression9_() {
   }
   return lhs;
 }
-Type_ expression8_() {
+Expression_Type expression8_() {
   auto lhs = expression7_();
   while (global::lex.name == "|") {
     getLex();
     auto rhs = expression7_();
-    if (lhs.t != Types::bool_) {
+    if (lhs.t != K_Variable_Type::K_Variable_Type_Bool) {
 
       throw SyntaxError("left operand not bool  in line: " + std::to_string(global::lex.num + 1));
-    } else if (rhs.t != Types::bool_) {
+    } else if (rhs.t != K_Variable_Type::K_Variable_Type_Bool) {
 
       throw SyntaxError("right operand not bool  in line: " + std::to_string(global::lex.num + 1));
     }
@@ -508,15 +510,15 @@ Type_ expression8_() {
   }
   return lhs;
 }
-Type_ expression7_() {
+Expression_Type expression7_() {
   auto lhs = expression6_();
   while (global::lex.name == "^") {
     getLex();
     auto rhs = expression6_();
-    if (lhs.t != Types::bool_) {
+    if (lhs.t != K_Variable_Type::K_Variable_Type_Bool) {
 
       throw SyntaxError("left operand not bool  in line: " + std::to_string(global::lex.num + 1));
-    } else if (rhs.t != Types::bool_) {
+    } else if (rhs.t != K_Variable_Type::K_Variable_Type_Bool) {
 
       throw SyntaxError("right operand not bool  in line: " + std::to_string(global::lex.num + 1));
     }
@@ -525,15 +527,15 @@ Type_ expression7_() {
   }
   return lhs;
 }
-Type_ expression6_() {
+Expression_Type expression6_() {
   auto lhs = expression5_();
   while (global::lex.name == "&") {
     getLex();
     auto rhs = expression5_();
-    if (lhs.t != Types::bool_) {
+    if (lhs.t != K_Variable_Type::K_Variable_Type_Bool) {
 
       throw SyntaxError("left operand not bool  in line: " + std::to_string(global::lex.num + 1));
-    } else if (rhs.t != Types::bool_) {
+    } else if (rhs.t != K_Variable_Type::K_Variable_Type_Bool) {
 
       throw SyntaxError("right operand not bool  in line: " + std::to_string(global::lex.num + 1));
     }
@@ -542,7 +544,7 @@ Type_ expression6_() {
   }
   return lhs;
 }
-Type_ expression5_() {
+Expression_Type expression5_() {
   auto lhs = expression4_();
   while (global::lex.name == "==" || global::lex.name == "!=") {
     getLex();
@@ -551,12 +553,12 @@ Type_ expression5_() {
 
       throw SyntaxError("different types in ==  in line: " + std::to_string(global::lex.num + 1));
     }
-    lhs.t = Types::bool_;
+    lhs.t = K_Variable_Type::K_Variable_Type_Bool;
     lhs.is_lvalue = false;
   }
   return lhs;
 }
-Type_ expression4_() {
+Expression_Type expression4_() {
   auto lhs = expression3_();
   while (global::lex.name == "<" || global::lex.name == ">" || global::lex.name == ">=" || global::lex.name == "<=") {
     getLex();
@@ -565,17 +567,17 @@ Type_ expression4_() {
 
       throw SyntaxError("different types in <  in line: " + std::to_string(global::lex.num + 1));
     }
-    lhs = {Types::bool_, false};
+    lhs = {K_Variable_Type::K_Variable_Type_Bool, false};
   }
   return lhs;
 }
-Type_ expression3_() {
+Expression_Type expression3_() {
   auto lhs = expression2_();
   while (global::lex.name == "+" || global::lex.name == "-") {
     bool is_plus = global::lex.name == "+";
     getLex();
     auto rhs = expression2_();
-    if (is_plus && lhs.t == Types::string_ && rhs.t == Types::string_) {
+    if (is_plus && lhs.t == K_Variable_Type::K_Variable_Type_String && rhs.t == K_Variable_Type::K_Variable_Type_String) {
       lhs.is_lvalue = false;
       continue;
     }
@@ -583,15 +585,15 @@ Type_ expression3_() {
 //
 //      throw SyntaxError("different types in +  in line: " + std::to_string(global::lex.num + 1));
 //    }
-    if ((lhs.t != Types::int_ && lhs.t != Types::float_) || (rhs.t != Types::int_ && rhs.t != Types::float_)) {
+    if ((lhs.t != K_Variable_Type::K_Variable_Type_Int && lhs.t != K_Variable_Type::K_Variable_Type_Float) || (rhs.t != K_Variable_Type::K_Variable_Type_Int && rhs.t != K_Variable_Type::K_Variable_Type_Float)) {
       throw SyntaxError("'-' overloaded only for int and float  in line: " + std::to_string(global::lex.num + 1));
     }
-    if (lhs.t != Types::float_)lhs = rhs;
+    if (lhs.t != K_Variable_Type::K_Variable_Type_Float)lhs = rhs;
     lhs.is_lvalue = false;
   }
   return lhs;
 }
-Type_ expression2_() {
+Expression_Type expression2_() {
   auto lhs = expression1_();
   while (global::lex.name == "*" || global::lex.name == "/" || global::lex.name == "%") {
     getLex();
@@ -600,16 +602,16 @@ Type_ expression2_() {
 //
 //      throw SyntaxError("different types in +  in line: " + std::to_string(global::lex.num + 1));
 //    }
-    if ((lhs.t != Types::int_ && lhs.t != Types::float_) || (rhs.t != Types::int_ && rhs.t != Types::float_)) {
+    if ((lhs.t != K_Variable_Type::K_Variable_Type_Int && lhs.t != K_Variable_Type::K_Variable_Type_Float) || (rhs.t != K_Variable_Type::K_Variable_Type_Int && rhs.t != K_Variable_Type::K_Variable_Type_Float)) {
       throw SyntaxError("* / % overloaded only for int and float  in line: " + std::to_string(global::lex.num + 1));
     }
 
-    if (lhs.t != Types::float_)lhs = rhs;
+    if (lhs.t != K_Variable_Type::K_Variable_Type_Float)lhs = rhs;
     lhs.is_lvalue = false;
   }
   return lhs;
 }
-Type_ expression1_() {
+Expression_Type expression1_() {
 //  auto operat = global::lex;
   std::vector<lexeme> unary_operators;
   while (global::lex.name == "+" || global::lex.name == "-" || global::lex.name == "++" || global::lex.name == "--"
@@ -621,7 +623,7 @@ Type_ expression1_() {
   while (!unary_operators.empty()) {
     auto operat = unary_operators.back();
     if (operat.name == "+" || operat.name == "-") {
-      if (lhs.t != Types::int_ && lhs.t != Types::float_) {
+      if (lhs.t != K_Variable_Type::K_Variable_Type_Int && lhs.t != K_Variable_Type::K_Variable_Type_Float) {
 
         throw SyntaxError(
             "unary + - overloaded only for int and float  in line: " + std::to_string(global::lex.num + 1));
@@ -629,7 +631,7 @@ Type_ expression1_() {
       lhs.is_lvalue = false;
 //    return lhs;
     } else if (operat.name == "++" || operat.name == "--") {
-      if (lhs.t != Types::int_ && lhs.t != Types::float_) {
+      if (lhs.t != K_Variable_Type::K_Variable_Type_Int && lhs.t != K_Variable_Type::K_Variable_Type_Float) {
 
         throw SyntaxError("++ -- overloaded only for int  in line: " + std::to_string(global::lex.num + 1));
       }
@@ -639,7 +641,7 @@ Type_ expression1_() {
       }
 //    return lhs;
     } else if (operat.name == "!") {
-      if (lhs.t != Types::bool_) {
+      if (lhs.t != K_Variable_Type::K_Variable_Type_Bool) {
         throw SyntaxError(
             "! overloaded only for bool" + std::string(" in line: ") + std::to_string(global::lex.num + 1));
       }
@@ -652,14 +654,14 @@ Type_ expression1_() {
   }
   return lhs;
 //  if (operat.name == "+" || operat.name == "-") {
-//    if (lhs.t != Types::int_ && lhs.t != Types::float_) {
+//    if (lhs.t != K_Variable_Type::K_Variable_Type_Int && lhs.t != K_Variable_Type::K_Variable_Type_Float) {
 //
 //      throw SyntaxError("unary + - overloaded only for int and float  in line: " + std::to_string(global::lex.num + 1));
 //    }
 //    lhs.is_lvalue = false;
 //    return lhs;
 //  } else if (operat.name == "++" || operat.name == "--") {
-//    if (lhs.t != Types::int_) {
+//    if (lhs.t != K_Variable_Type::K_Variable_Type_Int) {
 //
 //      throw SyntaxError("++ -- overloaded only for int  in line: " + std::to_string(global::lex.num + 1));
 //    }
@@ -668,7 +670,7 @@ Type_ expression1_() {
 //    }
 //    return lhs;
 //  } else if (operat.name == "!") {
-//    if (lhs.t != Types::bool_) {
+//    if (lhs.t != K_Variable_Type::K_Variable_Type_Bool) {
 //
 //      throw SyntaxError("! overloaded only for bool" +std::string(" in line: ") + std::to_string(global::lex.num + 1));
 //    }
@@ -679,60 +681,61 @@ Type_ expression1_() {
 //  }
 }
 
-Type_ expression0_() {
+Expression_Type expression0_() {
   auto lhs = expression_cool_();
-  if (global::lex.type == LexemeType::Open_square_brace){
-    if (lhs.t != Types::array_){
+  if (global::lex.type == LexemeType::Open_square_brace) {
+    if (lhs.t != K_Variable_Type::K_Variable_Type_Array) {
       throw SyntaxError("Indexation is only for arrays in line: " + std::to_string(global::lex.num + 1));
     }
     getLex();
     auto ind = expression_();
-    if (ind.t != Types::int_){
+    if (ind.t != K_Variable_Type::K_Variable_Type_Int) {
       throw SyntaxError("Index is only int, in line: " + std::to_string(global::lex.num + 1));
     }
-    if (global::lex.type != LexemeType::Close_square_brace){
+    if (global::lex.type != LexemeType::Close_square_brace) {
       throw SyntaxError("Expected ']' in line: " + std::to_string(global::lex.num + 1));
     }
     getLex();
-    Type_ return_type = {Types::int_, false};
+    Expression_Type return_type = {K_Variable_Type::K_Variable_Type_Int, false};
     return_type.is_lvalue = lhs.is_lvalue;
     return return_type;
   }
   return lhs;
 }
 
-Type_ expression_cool_() {
+Expression_Type expression_cool_() {
   if (global::lex.name == "true") {
     getLex();
-    return {Types::bool_, false};
+    return {K_Variable_Type::K_Variable_Type_Bool, false};
   } else if (global::lex.name == "false") {
     getLex();
-    return {Types::bool_, false};
+    return {K_Variable_Type::K_Variable_Type_Bool, false};
   } else if (global::lex.type == LexemeType::String_Literal) {
     getLex();
-    return {Types::string_, false};
+    return {K_Variable_Type::K_Variable_Type_String, false};
   } else if (global::lex.type == LexemeType::Literal) {
-    auto tp = Types::int_;
+    auto tp = K_Variable_Type::K_Variable_Type_Int;
     if (std::count(global::lex.name.begin(), global::lex.name.end(), '.')) {
-      tp = Types::float_;
+      tp = K_Variable_Type::K_Variable_Type_Float;
     }
     getLex();
     return {tp, false};
   } else if (global::lex.type == LexemeType::Identificator) {
-    auto cur_lex = global::lex;
+    auto cur_id = global::lex;
     identificator_();
+//    global::poliz_stack.push_back()
     if (global::lex.type == LexemeType::Open_brace) {
       getLex();
-      std::vector<Type_> args_types = function_call_();
+      std::vector<Expression_Type> args_types = function_call_();
       if (global::lex.type == LexemeType::Close_brace) {
         getLex();
       } else {
         throw SyntaxError((std::string("Expected ')' ") + std::to_string(global::lex.num + 1)));
       }
-      return {global::function_table.check_id(cur_lex.name, args_types).type_of_return, false};
+      return {global::function_table.check_id(cur_id.name, args_types).type_of_return, false};
     }/* else if (global::lex.type == LexemeType::Open_square_brace) {
-      if (global::tree_of_variables.check_id(cur_lex.name) != Types::array_) {
-        throw SyntaxError(cur_lex.name + "aren't an array in line: " + std::to_string(cur_lex.num + 1));
+      if (global::tree_of_variables.check_id(cur_id.name) != K_Variable_Type::K_Variable_Type_Array) {
+        throw SyntaxError(cur_id.name + "aren't an array in line: " + std::to_string(cur_id.num + 1));
       }
       getLex();
       auto ans = expression_();
@@ -740,14 +743,14 @@ Type_ expression_cool_() {
         throw SyntaxError("Expected '] in line: " + std::to_string(global::lex.num + 1));
       }
       getLex();
-      return {Types::int_, true};
+      return {K_Variable_Type::K_Variable_Type_Int, true};
     } */
     else {
-      if (global::tree_of_variables.check_id(cur_lex.name) == Types::NULLTYPE) {
-        throw SyntaxError("No var " + cur_lex.name + " in this scope" + std::string(" in line: ")
+      if (global::tree_of_variables.check_id(cur_id.name) == K_Variable_Type::K_Variable_Type_NULLTYPE) {
+        throw SyntaxError("No var " + cur_id.name + " in this scope" + std::string(" in line: ")
                               + std::to_string(global::lex.num + 1));
       }
-      return {global::tree_of_variables.check_id(cur_lex.name), true};
+      return {global::tree_of_variables.check_id(cur_id.name), true};
     }
   } else if (global::lex.type == LexemeType::Open_brace) {
     getLex();
@@ -759,7 +762,7 @@ Type_ expression_cool_() {
     }
     return lhs;
 
-  } else if (global::lex.type == LexemeType::Open_square_brace) {
+  } /*else if (global::lex.type == LexemeType::Open_square_brace) {
     getLex();
     auto lhs = expression_();
     if (global::lex.type == LexemeType::Close_square_brace) {
@@ -768,16 +771,17 @@ Type_ expression_cool_() {
       throw SyntaxError((std::string("Expected ']' ") + std::to_string(global::lex.num + 1)));
     }
     return lhs;
-  } else {
+  }*/
+  else {
     //TODO возможно экспрешены не ловят ошибки
-//    throw SyntaxError((std::string("Expected identificator, literal, braces or function call or some another primitive ")
-//        + std::to_string(global::lex.num + 1)));
-    return expression_();
+    throw SyntaxError((std::string("Expected identificator, literal, braces or function call or some another primitive ")
+        + std::to_string(global::lex.num + 1)));
+//    return expression_();
 //    throw SyntaxError((std::string("Expected 'expression' ") + std::to_string(global::lex.num + 1)));
   }
 }
-std::vector<Type_> function_call_() {
-  std::vector<Type_> args_types;
+std::vector<Expression_Type> function_call_() {
+  std::vector<Expression_Type> args_types;
   while (global::lex.type != LexemeType::Close_brace) {
     args_types.push_back(expression9_());
     if (global::lex.type == LexemeType::Comma) {

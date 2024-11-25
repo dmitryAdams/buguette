@@ -25,6 +25,11 @@ add_executable(bugguette main.cpp
         semantic_analizator/TID/Function_TID.h
         semantic_analizator/SemanticError/SemanticError.cpp
         semantic_analizator/SemanticError/SemanticError.h
+        Generation/Operator/PolizOperator.h
+        Generation/Operand/PolizOperand.h
+        Generation/Operand/PolizOperand.cpp
+        Generation/Operator/PolizOperator.cpp
+        Generation/StackElement/StackElement.cpp
 )
 
 add_compile_definitions("")

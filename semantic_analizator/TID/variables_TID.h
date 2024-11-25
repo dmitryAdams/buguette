@@ -11,22 +11,22 @@ class variables_TID {
  public:
   variables_TID() = default;
 
-  bool addId(const std::string &name, Types type){
+  bool addId(const std::string &name, K_Variable_Type type){
     if (tid.count(name)){
       return false;
     } else {
       auto &tmp = tid[name] = {type, nullptr};
-      if (type == Types::int_){
+      if (type == K_Variable_Type::K_Variable_Type_Int){
         tmp.second = new int;
-      } else if (type == Types::float_){
+      } else if (type == K_Variable_Type::K_Variable_Type_Float){
         tmp.second = new float ;
-      } else if(type == Types::bool_){
+      } else if(type == K_Variable_Type::K_Variable_Type_Bool){
         tmp.second = new bool ;
-      } else if (type == Types::char_){
+      } else if (type == K_Variable_Type::K_Variable_Type_Char){
         tmp.second = new char;
-      } else if (type == Types::array_){
+      } else if (type == K_Variable_Type::K_Variable_Type_Array){
         tmp.second = new std::vector<int>;
-      } else if (type == Types::string_){
+      } else if (type == K_Variable_Type::K_Variable_Type_String){
         tmp.second = new std::string;
       } else {
         throw std::logic_error("type with undefined behaviour");
@@ -34,7 +34,7 @@ class variables_TID {
       return true;
     }
   }
-//  bool addEl(const std::string &name, Types type, int x = 0){
+//  bool addEl(const std::string &name, K_Variable_Type type, int x = 0){
 //    if (tid.count(name)){
 //      return false;
 //    } else {
@@ -42,26 +42,26 @@ class variables_TID {
 //      return true;
 //    }
 //  }
-  Types isInTID(const std::string &name){
+  K_Variable_Type isInTID(const std::string &name){
     if (tid.count(name)){
       return tid.find(name)->second.first;
     } else {
-      return NULLTYPE;
+      return K_Variable_Type_NULLTYPE;
     }
   }
   ~variables_TID(){
     for(const auto &[i, j] : tid){
-      if (j.first == Types::int_){
+      if (j.first == K_Variable_Type::K_Variable_Type_Int){
         delete (int*)j.second;
-      } else if (j.first == Types::float_){
+      } else if (j.first == K_Variable_Type::K_Variable_Type_Float){
         delete (float*)j.second;
-      } else if(j.first == Types::bool_){
+      } else if(j.first == K_Variable_Type::K_Variable_Type_Bool){
         delete (bool*)j.second;
-      } else if (j.first == Types::char_){
+      } else if (j.first == K_Variable_Type::K_Variable_Type_Char){
         delete (char*) j.second;
-      } else if (j.first == Types::array_){
+      } else if (j.first == K_Variable_Type::K_Variable_Type_Array){
         delete (std::vector<int> *)j.second;
-      } else if (j.first == Types::string_){
+      } else if (j.first == K_Variable_Type::K_Variable_Type_String){
         delete (std::string *)j.second;
       } else {
         throw std::logic_error("type with undefined behaviour");
@@ -69,7 +69,7 @@ class variables_TID {
     }
   }
  private:
-  std::map<std::string, std::pair<Types, void *>> tid;
+  std::map<std::string, std::pair<K_Variable_Type, void *>> tid;
 };
 
 #endif //BUGGUETTE_SEMANTIC_ANALIZATOR_TID_VARIABLES_TID_H_
