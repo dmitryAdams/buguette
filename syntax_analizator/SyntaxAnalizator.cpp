@@ -2,6 +2,8 @@
 #include "SyntaxAnalizator.h"
 #include "./syntax_error/SyntaxError.h"
 #include "../lib.h"
+#include "../Generation/Operator/PolizOperator.h"
+#include "../Generation/Operand/PolizOperand.h"
 K_Variable_Type type_by_name(const std::string &type_name) {
   if (type_name == "int") {
     return K_Variable_Type::K_Variable_Type_Int;
@@ -388,6 +390,7 @@ void switch_() {
 void variables_declaration_() {
   if (global::lex.type == LexemeType::Type) {
     if (global::lex.name == "array") {
+      //TODO написать хуйню для массивов
       getLex();
       auto cur_lex = global::lex;
       identificator_();
@@ -426,42 +429,33 @@ void variables_declaration_() {
       auto cur_id = global::lex;
       identificator_();
       global::tree_of_variables.push_id(cur_id.name, cur_type.name);
+      global::poliz_stack.push_back(new PolizOperand(global::tree_of_variables.check_id(cur_id.name),
+                                                     global::tree_of_variables.getAdress(cur_id.name)));
       if (global::lex.name == "=") {
         getLex();
         auto rhs = expression9_();
+        global::poliz_stack.push_back(new PolizOperator("="));
         if (type_by_name(cur_type.name) != rhs.t) {
           throw SyntaxError("Incorrect type in variable declaration in line: " + std::to_string(cur_id.num + 1));
         }
       }
+      global::poliz_stack.push_back(new PolizOperator(";", true));
       while (global::lex.type == LexemeType::Comma) {
         getLex();
         cur_id = global::lex;
         identificator_();
         global::tree_of_variables.push_id(cur_id.name, cur_type.name);
+        global::poliz_stack.push_back(new PolizOperand(global::tree_of_variables.check_id(cur_id.name),
+                                                       global::tree_of_variables.getAdress(cur_id.name)));
         if (global::lex.name == "=") {
           getLex();
           auto rhs = expression9_();
+          global::poliz_stack.push_back(new PolizOperator("="));
           if (type_by_name(cur_type.name) != rhs.t) {
             throw SyntaxError("Incorrect type in variable declaration in line: " + std::to_string(cur_id.num + 1));
           }
         }
-//        auto cur_id = global::lex;
-//        identificator_();
-//        global::tree_of_variables.push_id(cur_id.name, cur_type.name);
-//        if (global::lex.type == LexemeType::Comma) {
-//          getLex();
-//          continue;
-//        } else if (global::lex.name == "=") {
-//          getLex();
-//          expression9_();
-//          if (global::lex.type == LexemeType::Semicolon || global::lex.type == LexemeType::Comma) {
-//            continue;
-//          } else {
-//            throw SyntaxError((std::string("Expected ';' ',' ") + std::to_string(global::lex.num + 1)));
-//          }
-//        } else if (global::lex.type != LexemeType::Semicolon) {
-//          throw SyntaxError((std::string("Expected '=' or ',' ") + std::to_string(global::lex.num + 1)));
-//        }
+        global::poliz_stack.push_back(new PolizOperator(";", true));
       }
     }
   } else {
@@ -469,19 +463,25 @@ void variables_declaration_() {
   }
 }
 Expression_Type expression_() {
-  return expression10_();
+  auto ans =  expression10_();
+  global::poliz_stack.push_back(new PolizOperator(";", true));
+  return ans;
 }
 Expression_Type expression10_() {
   auto lhs = expression9_();
   while (global::lex.name == ",") {
+    auto cur_id = global::lex.name;
     getLex();
     lhs = expression9_();
+    global::poliz_stack.push_back(new PolizOperator(cur_id));
+
   }
   return lhs;
 }
 Expression_Type expression9_() {
   auto lhs = expression8_();
   while (global::lex.name == "=") {
+    auto cur_id = global::lex.name;
     getLex();
     auto rhs = expression8_();
     if (!lhs.is_lvalue) {
@@ -490,12 +490,15 @@ Expression_Type expression9_() {
       throw SyntaxError("different types in operator =  in line: " + std::to_string(global::lex.num + 1));
     }
     lhs = rhs;
+    global::poliz_stack.push_back(new PolizOperator(cur_id));
+
   }
   return lhs;
 }
 Expression_Type expression8_() {
   auto lhs = expression7_();
   while (global::lex.name == "|") {
+    auto cur_id = global::lex.name;
     getLex();
     auto rhs = expression7_();
     if (lhs.t != K_Variable_Type::K_Variable_Type_Bool) {
@@ -507,12 +510,15 @@ Expression_Type expression8_() {
     }
     lhs = rhs;
     lhs.is_lvalue = false;
+    global::poliz_stack.push_back(new PolizOperator(cur_id));
+
   }
   return lhs;
 }
 Expression_Type expression7_() {
   auto lhs = expression6_();
   while (global::lex.name == "^") {
+    auto cur_id = global::lex.name;
     getLex();
     auto rhs = expression6_();
     if (lhs.t != K_Variable_Type::K_Variable_Type_Bool) {
@@ -524,12 +530,15 @@ Expression_Type expression7_() {
     }
     lhs = rhs;
     lhs.is_lvalue = false;
+    global::poliz_stack.push_back(new PolizOperator(cur_id));
+
   }
   return lhs;
 }
 Expression_Type expression6_() {
   auto lhs = expression5_();
   while (global::lex.name == "&") {
+    auto cur_id = global::lex.name;
     getLex();
     auto rhs = expression5_();
     if (lhs.t != K_Variable_Type::K_Variable_Type_Bool) {
@@ -541,12 +550,15 @@ Expression_Type expression6_() {
     }
     lhs = rhs;
     lhs.is_lvalue = false;
+    global::poliz_stack.push_back(new PolizOperator(cur_id));
+
   }
   return lhs;
 }
 Expression_Type expression5_() {
   auto lhs = expression4_();
   while (global::lex.name == "==" || global::lex.name == "!=") {
+    auto cur_id = global::lex.name;
     getLex();
     auto rhs = expression4_();
     if (lhs.t != rhs.t) {
@@ -555,12 +567,15 @@ Expression_Type expression5_() {
     }
     lhs.t = K_Variable_Type::K_Variable_Type_Bool;
     lhs.is_lvalue = false;
+    global::poliz_stack.push_back(new PolizOperator(cur_id));
+
   }
   return lhs;
 }
 Expression_Type expression4_() {
   auto lhs = expression3_();
   while (global::lex.name == "<" || global::lex.name == ">" || global::lex.name == ">=" || global::lex.name == "<=") {
+    auto cur_id = global::lex.name;
     getLex();
     auto rhs = expression3_();
     if (lhs.t != rhs.t) {
@@ -568,6 +583,8 @@ Expression_Type expression4_() {
       throw SyntaxError("different types in <  in line: " + std::to_string(global::lex.num + 1));
     }
     lhs = {K_Variable_Type::K_Variable_Type_Bool, false};
+    global::poliz_stack.push_back(new PolizOperator(cur_id));
+
   }
   return lhs;
 }
@@ -575,19 +592,19 @@ Expression_Type expression3_() {
   auto lhs = expression2_();
   while (global::lex.name == "+" || global::lex.name == "-") {
     bool is_plus = global::lex.name == "+";
+    auto cur_id = global::lex.name;
     getLex();
     auto rhs = expression2_();
-    if (is_plus && lhs.t == K_Variable_Type::K_Variable_Type_String && rhs.t == K_Variable_Type::K_Variable_Type_String) {
+    if (is_plus && lhs.t == K_Variable_Type::K_Variable_Type_String
+        && rhs.t == K_Variable_Type::K_Variable_Type_String) {
       lhs.is_lvalue = false;
       continue;
     }
-//    if (lhs.t != rhs.t) {
-//
-//      throw SyntaxError("different types in +  in line: " + std::to_string(global::lex.num + 1));
-//    }
-    if ((lhs.t != K_Variable_Type::K_Variable_Type_Int && lhs.t != K_Variable_Type::K_Variable_Type_Float) || (rhs.t != K_Variable_Type::K_Variable_Type_Int && rhs.t != K_Variable_Type::K_Variable_Type_Float)) {
+    if ((lhs.t != K_Variable_Type::K_Variable_Type_Int && lhs.t != K_Variable_Type::K_Variable_Type_Float)
+        || (rhs.t != K_Variable_Type::K_Variable_Type_Int && rhs.t != K_Variable_Type::K_Variable_Type_Float)) {
       throw SyntaxError("'-' overloaded only for int and float  in line: " + std::to_string(global::lex.num + 1));
     }
+    global::poliz_stack.push_back(new PolizOperator(cur_id));
     if (lhs.t != K_Variable_Type::K_Variable_Type_Float)lhs = rhs;
     lhs.is_lvalue = false;
   }
@@ -596,16 +613,14 @@ Expression_Type expression3_() {
 Expression_Type expression2_() {
   auto lhs = expression1_();
   while (global::lex.name == "*" || global::lex.name == "/" || global::lex.name == "%") {
+    auto cur_id = global::lex.name;
     getLex();
     auto rhs = expression1_();
-//    if (lhs.t != rhs.t) {
-//
-//      throw SyntaxError("different types in +  in line: " + std::to_string(global::lex.num + 1));
-//    }
-    if ((lhs.t != K_Variable_Type::K_Variable_Type_Int && lhs.t != K_Variable_Type::K_Variable_Type_Float) || (rhs.t != K_Variable_Type::K_Variable_Type_Int && rhs.t != K_Variable_Type::K_Variable_Type_Float)) {
+    if ((lhs.t != K_Variable_Type::K_Variable_Type_Int && lhs.t != K_Variable_Type::K_Variable_Type_Float)
+        || (rhs.t != K_Variable_Type::K_Variable_Type_Int && rhs.t != K_Variable_Type::K_Variable_Type_Float)) {
       throw SyntaxError("* / % overloaded only for int and float  in line: " + std::to_string(global::lex.num + 1));
     }
-
+    global::poliz_stack.push_back(new PolizOperator(cur_id));
     if (lhs.t != K_Variable_Type::K_Variable_Type_Float)lhs = rhs;
     lhs.is_lvalue = false;
   }
@@ -629,7 +644,6 @@ Expression_Type expression1_() {
             "unary + - overloaded only for int and float  in line: " + std::to_string(global::lex.num + 1));
       }
       lhs.is_lvalue = false;
-//    return lhs;
     } else if (operat.name == "++" || operat.name == "--") {
       if (lhs.t != K_Variable_Type::K_Variable_Type_Int && lhs.t != K_Variable_Type::K_Variable_Type_Float) {
 
@@ -639,46 +653,17 @@ Expression_Type expression1_() {
         throw SyntaxError(
             "++ -- overloaded only for lvalue int or float in line: " + std::to_string(global::lex.num + 1));
       }
-//    return lhs;
     } else if (operat.name == "!") {
       if (lhs.t != K_Variable_Type::K_Variable_Type_Bool) {
         throw SyntaxError(
             "! overloaded only for bool" + std::string(" in line: ") + std::to_string(global::lex.num + 1));
       }
       lhs.is_lvalue = false;
-//    return lhs;
-    } else {
-//    return lhs;
     }
+    global::poliz_stack.push_back(new PolizOperator(unary_operators.back().name, true));
     unary_operators.pop_back();
   }
   return lhs;
-//  if (operat.name == "+" || operat.name == "-") {
-//    if (lhs.t != K_Variable_Type::K_Variable_Type_Int && lhs.t != K_Variable_Type::K_Variable_Type_Float) {
-//
-//      throw SyntaxError("unary + - overloaded only for int and float  in line: " + std::to_string(global::lex.num + 1));
-//    }
-//    lhs.is_lvalue = false;
-//    return lhs;
-//  } else if (operat.name == "++" || operat.name == "--") {
-//    if (lhs.t != K_Variable_Type::K_Variable_Type_Int) {
-//
-//      throw SyntaxError("++ -- overloaded only for int  in line: " + std::to_string(global::lex.num + 1));
-//    }
-//    if (!lhs.is_lvalue) {
-//      throw SyntaxError("++ -- overloaded only for lvalue int  in line: " + std::to_string(global::lex.num + 1));
-//    }
-//    return lhs;
-//  } else if (operat.name == "!") {
-//    if (lhs.t != K_Variable_Type::K_Variable_Type_Bool) {
-//
-//      throw SyntaxError("! overloaded only for bool" +std::string(" in line: ") + std::to_string(global::lex.num + 1));
-//    }
-//    lhs.is_lvalue = false;
-//    return lhs;
-//  } else {
-//    return lhs;
-//  }
 }
 
 Expression_Type expression0_() {
@@ -698,6 +683,7 @@ Expression_Type expression0_() {
     getLex();
     Expression_Type return_type = {K_Variable_Type::K_Variable_Type_Int, false};
     return_type.is_lvalue = lhs.is_lvalue;
+    global::poliz_stack.push_back(new PolizOperator("["));
     return return_type;
   }
   return lhs;
@@ -706,25 +692,34 @@ Expression_Type expression0_() {
 Expression_Type expression_cool_() {
   if (global::lex.name == "true") {
     getLex();
+    global::poliz_stack.push_back(new PolizOperand(K_Variable_Type_Bool, (void *) (new bool(true))));
     return {K_Variable_Type::K_Variable_Type_Bool, false};
   } else if (global::lex.name == "false") {
     getLex();
+    global::poliz_stack.push_back(new PolizOperand(K_Variable_Type_Bool, (void *) (new bool(false))));
     return {K_Variable_Type::K_Variable_Type_Bool, false};
   } else if (global::lex.type == LexemeType::String_Literal) {
+    global::poliz_stack.push_back(new PolizOperand(K_Variable_Type_String,
+                                                   (void *) (new std::string(global::lex.name))));
     getLex();
     return {K_Variable_Type::K_Variable_Type_String, false};
   } else if (global::lex.type == LexemeType::Literal) {
     auto tp = K_Variable_Type::K_Variable_Type_Int;
     if (std::count(global::lex.name.begin(), global::lex.name.end(), '.')) {
       tp = K_Variable_Type::K_Variable_Type_Float;
+      global::poliz_stack.push_back(new PolizOperand(K_Variable_Type_Float,
+                                                     (void *) (new double(std::stod(global::lex.name)))));
+    } else {
+      global::poliz_stack.push_back(new PolizOperand(K_Variable_Type_Int,
+                                                     (void *) (new int(std::stoi(global::lex.name)))));
     }
     getLex();
     return {tp, false};
   } else if (global::lex.type == LexemeType::Identificator) {
     auto cur_id = global::lex;
     identificator_();
-//    global::poliz_stack.push_back()
     if (global::lex.type == LexemeType::Open_brace) {
+      //TODO НАПИСАТЬ ОПЕРАТОР ФУНКЦИИ И ДОБАВЛЯТЬ ЕЕ В ПОЛИЗ
       getLex();
       std::vector<Expression_Type> args_types = function_call_();
       if (global::lex.type == LexemeType::Close_brace) {
@@ -733,23 +728,13 @@ Expression_Type expression_cool_() {
         throw SyntaxError((std::string("Expected ')' ") + std::to_string(global::lex.num + 1)));
       }
       return {global::function_table.check_id(cur_id.name, args_types).type_of_return, false};
-    }/* else if (global::lex.type == LexemeType::Open_square_brace) {
-      if (global::tree_of_variables.check_id(cur_id.name) != K_Variable_Type::K_Variable_Type_Array) {
-        throw SyntaxError(cur_id.name + "aren't an array in line: " + std::to_string(cur_id.num + 1));
-      }
-      getLex();
-      auto ans = expression_();
-      if (global::lex.type != LexemeType::Close_square_brace) {
-        throw SyntaxError("Expected '] in line: " + std::to_string(global::lex.num + 1));
-      }
-      getLex();
-      return {K_Variable_Type::K_Variable_Type_Int, true};
-    } */
-    else {
+    } else {
       if (global::tree_of_variables.check_id(cur_id.name) == K_Variable_Type::K_Variable_Type_NULLTYPE) {
         throw SyntaxError("No var " + cur_id.name + " in this scope" + std::string(" in line: ")
                               + std::to_string(global::lex.num + 1));
       }
+      global::poliz_stack.push_back(new PolizOperand(global::tree_of_variables.check_id(cur_id.name),
+                                                     global::tree_of_variables.getAdress(cur_id.name)));
       return {global::tree_of_variables.check_id(cur_id.name), true};
     }
   } else if (global::lex.type == LexemeType::Open_brace) {
@@ -762,17 +747,7 @@ Expression_Type expression_cool_() {
     }
     return lhs;
 
-  } /*else if (global::lex.type == LexemeType::Open_square_brace) {
-    getLex();
-    auto lhs = expression_();
-    if (global::lex.type == LexemeType::Close_square_brace) {
-      getLex();
-    } else {
-      throw SyntaxError((std::string("Expected ']' ") + std::to_string(global::lex.num + 1)));
-    }
-    return lhs;
-  }*/
-  else {
+  } else {
     //TODO возможно экспрешены не ловят ошибки
     throw SyntaxError((std::string("Expected identificator, literal, braces or function call or some another primitive ")
         + std::to_string(global::lex.num + 1)));

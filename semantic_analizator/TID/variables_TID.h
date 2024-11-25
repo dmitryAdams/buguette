@@ -49,12 +49,19 @@ class variables_TID {
       return K_Variable_Type_NULLTYPE;
     }
   }
+  void *getVariableAdress(const std::string &name){
+    if (tid.count(name)){
+      return tid.find(name)->second.second;
+    } else {
+      return nullptr;
+    }
+  }
   ~variables_TID(){
     for(const auto &[i, j] : tid){
       if (j.first == K_Variable_Type::K_Variable_Type_Int){
         delete (int*)j.second;
       } else if (j.first == K_Variable_Type::K_Variable_Type_Float){
-        delete (float*)j.second;
+        delete (double*)j.second;
       } else if(j.first == K_Variable_Type::K_Variable_Type_Bool){
         delete (bool*)j.second;
       } else if (j.first == K_Variable_Type::K_Variable_Type_Char){

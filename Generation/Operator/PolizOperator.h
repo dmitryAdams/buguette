@@ -30,14 +30,17 @@ enum KOperand {
   KO_Open_Brace,
   KO_CLose_Brace,
   KO_Open_Square_Brace,
-  KO_Close_Square_Brace
+  KO_Close_Square_Brace,
+  KO_Semicolon,
+  //TODO расписать func call
+  KO_Function_Call
 };
 
 #include "../../lib.h"
 
 class PolizOperator : public StackElement {
  public:
-  PolizOperator(std::string &operator_name, bool is_unary = false) {
+  PolizOperator(const std::string &operator_name, bool is_unary = false) {
     if (!is_unary) {
       if (operator_name == "+") {
         self = KO_Bin_Plus;
@@ -85,6 +88,8 @@ class PolizOperator : public StackElement {
         self = KO_Minus_Increment;
       } else if (operator_name == "!"){
         self = KO_Not;
+      } else if (operator_name == ";"){
+        self = KO_Semicolon;
       }
     }
   }

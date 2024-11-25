@@ -13,7 +13,7 @@ class PolizOperand : public StackElement {
   bool is_operator() override {
     return false;
   }
-  PolizOperand(K_Variable_Type type, void* address) : element_type_(type), element_address_(address) {}
+  PolizOperand(K_Variable_Type type_, void* address) : element_type_(type_), element_address_(address) {}
  private:
   K_Variable_Type element_type_;
   void *element_address_;

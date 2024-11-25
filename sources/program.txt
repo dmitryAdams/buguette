@@ -1,7 +1,4 @@
 main(){
-    int a, b, c;
-    a + c;
-    for(int a= 0; a < 5; a = a + 2){
-        print(a);
-    }
+    int a = 5 + 7, b;
+    a + b;
 }

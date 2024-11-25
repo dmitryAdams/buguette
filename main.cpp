@@ -23,10 +23,21 @@
 #include "./syntax_analizator/SyntaxAnalizator.h"
 #include "./syntax_analizator/syntax_error/SyntaxError.h"
 #include "./semantic_analizator/SemanticError/SemanticError.h"
+#include "Generation/Operator/PolizOperator.h"
+#include "Generation/Operand/PolizOperand.h"
 int main() {
 //  try{
     starter();
     program_();
+    for(auto i : global::poliz_stack){
+      if (i->is_operator()){
+        auto p = dynamic_cast<PolizOperator*>(i);
+        std::cerr << "aboba";
+      } else {
+        auto p = dynamic_cast<PolizOperand*>(i);
+        std::cerr << "aboba";
+      }
+    }
 //  }
 //  catch (SyntaxError &e){
 //    std::cout << e.what() << '\n';

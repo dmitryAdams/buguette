@@ -61,6 +61,17 @@ class Tree_variables_TID {
     }
     return K_Variable_Type::K_Variable_Type_NULLTYPE;
   }
+  void * getAdress(const std::string &name){
+    auto now = cur;
+    while (now != nullptr){
+      auto tmp = now->tid.isInTID(name);
+      if (tmp != K_Variable_Type::K_Variable_Type_NULLTYPE){
+        return now->tid.getVariableAdress(name);
+      }
+      now = now->pred;
+    }
+    return nullptr;
+  }
  private:
   struct Node{
     Node *pred;
