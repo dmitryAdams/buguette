@@ -30,13 +30,14 @@ int main() {
     starter();
     program_();
     for(auto i : global::poliz_stack){
-      if (i->is_operator()){
-        auto p = dynamic_cast<PolizOperator*>(i);
-        std::cerr << "aboba";
-      } else {
-        auto p = dynamic_cast<PolizOperand*>(i);
-        std::cerr << "aboba";
-      }
+//      if (i->is_operator()){
+//        auto p = dynamic_cast<PolizOperator*>(i);
+////        std::cerr << p;
+//      } else {
+//        auto p = dynamic_cast<PolizOperand*>(i);
+////        std::cerr << "aboba";
+//      }
+      std::cerr << *i << ' ';
     }
 //  }
 //  catch (SyntaxError &e){

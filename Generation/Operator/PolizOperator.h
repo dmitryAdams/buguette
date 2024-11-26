@@ -5,7 +5,8 @@
 #ifndef BUGGUETTE_GENERATION_POLIZOPERATOR_H_
 #define BUGGUETTE_GENERATION_POLIZOPERATOR_H_
 #include "../StackElement/StackElement.h"
-enum KOperand {
+#include "../../semantic_analizator/TID/Function_TID.h"
+enum KOperator {
   KO_Bin_Plus,
   KO_Bin_Minus,
   KO_Unary_Plus,
@@ -32,8 +33,9 @@ enum KOperand {
   KO_Open_Square_Brace,
   KO_Close_Square_Brace,
   KO_Semicolon,
-  //TODO расписать func call
-  KO_Function_Call
+  KO_Function_Call,
+  KO_Go_False,
+  KO_Go,
 };
 
 #include "../../lib.h"
@@ -41,63 +43,85 @@ enum KOperand {
 class PolizOperator : public StackElement {
  public:
   PolizOperator(const std::string &operator_name, bool is_unary = false) {
+    string_representation_ = operator_name;
     if (!is_unary) {
       if (operator_name == "+") {
-        self = KO_Bin_Plus;
+        self_ = KO_Bin_Plus;
       } else if (operator_name == "-") {
-        self = KO_Bin_Minus;
+        self_ = KO_Bin_Minus;
       } else if (operator_name == "*") {
-        self = KO_Mul;
+        self_ = KO_Mul;
       } else if (operator_name == "/") {
-        self = KO_Div;
+        self_ = KO_Div;
       } else if (operator_name == "%") {
-        self = KO_Mod;
+        self_ = KO_Mod;
       } else if (operator_name == "=") {
-        self = KO_Assigment;
+        self_ = KO_Assigment;
       } else if (operator_name == "==") {
-        self = KO_Equal;
+        self_ = KO_Equal;
       } else if (operator_name == "<") {
-        self = KO_Less;
+        self_ = KO_Less;
       } else if (operator_name == ">") {
-        self = KO_Greater;
+        self_ = KO_Greater;
       } else if (operator_name == "<=") {
-        self = KO_Less_Equal;
+        self_ = KO_Less_Equal;
       } else if (operator_name == ">=") {
-        self = KO_Greater_Equal;
+        self_ = KO_Greater_Equal;
       } else if (operator_name == "!=") {
-        self = KO_Not_Equal;
+        self_ = KO_Not_Equal;
       } else if (operator_name == ",") {
-        self = KO_Comma;
+        self_ = KO_Comma;
       } else if (operator_name == "|") {
-        self = KO_Or;
+        self_ = KO_Or;
       } else if (operator_name == "^") {
-        self = KO_Xor;
+        self_ = KO_Xor;
       } else if (operator_name == "&") {
-        self = KO_And;
-      } else if (operator_name == "["){
-        self = KO_Open_Square_Brace;
+        self_ = KO_And;
+      } else if (operator_name == "[") {
+        self_ = KO_Open_Square_Brace;
+      } else if (operator_name == "func") {
+        self_ = KO_Function_Call;
+      } else if (operator_name == "F") {
+        self_ = KO_Go_False;
+      } else {
+#ifdef DEBUG
+        //TODO
+        throw std::logic_error("INVALID OPERATOR");
+#endif
       }
     } else {
-      if (operator_name == "+"){
-        self = KO_Unary_Plus;
-      } else if (operator_name == "-"){
-        self = KO_Unary_Minus;
-      } else if (operator_name == "++"){
-        self = KO_Plus_Increment;
-      } else if (operator_name == "--"){
-        self = KO_Minus_Increment;
-      } else if (operator_name == "!"){
-        self = KO_Not;
-      } else if (operator_name == ";"){
-        self = KO_Semicolon;
+      if (operator_name == "+") {
+        self_ = KO_Unary_Plus;
+      } else if (operator_name == "-") {
+        self_ = KO_Unary_Minus;
+      } else if (operator_name == "++") {
+        self_ = KO_Plus_Increment;
+      } else if (operator_name == "--") {
+        self_ = KO_Minus_Increment;
+      } else if (operator_name == "!") {
+        self_ = KO_Not;
+      } else if (operator_name == ";") {
+        self_ = KO_Semicolon;
+      } else if (operator_name == "Go") {
+        self_ = KO_Go;
+      } else {
+#ifdef DEBUG
+        //TODO
+        throw std::logic_error("INVALID OPERATOR");
+#endif
       }
     }
+  }
+  void upd(void *) override {
+    return;
   }
   bool is_operator() override {
     return true;
   }
+  FunctionKey function;
  private:
-  KOperand self;
+  KOperator self_;
+//  std::string string_representation_;
 };
 
 #endif //BUGGUETTE_GENERATION_POLIZOPERATOR_H_

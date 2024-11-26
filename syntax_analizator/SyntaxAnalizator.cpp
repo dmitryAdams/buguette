@@ -179,26 +179,26 @@ void operator_() {
       break;
     case LexemeType::Service_word:
       if (global::lex.name == "for") {
-        global::opened_operators.insert("cycle");
+//        global::opened_operators.insert("cycle");
         global::tree_of_variables.create_scope();
         for_();
         global::tree_of_variables.exit_scope();
-        global::opened_operators.extract("cycle");
+//        global::opened_operators.extract("cycle");
       } else if (global::lex.name == "while") {
-        global::opened_operators.insert("cycle");
+//        global::opened_operators.insert("cycle");
         global::tree_of_variables.create_scope();
         while_();
         global::tree_of_variables.exit_scope();
-        global::opened_operators.extract("cycle");
+//        global::opened_operators.extract("cycle");
       } else if (global::lex.name == "break") {
-        if (global::opened_operators.find("cycle") == global::opened_operators.end()) {
-          throw SyntaxError("'break' is not in cycle in line:" + std::to_string(global::lex.num + 1));
-        }
+//        if (global::opened_operators.find("cycle") == global::opened_operators.end()) {
+//          throw SyntaxError("'break' is not in cycle in line:" + std::to_string(global::lex.num + 1));
+//        }
         break_();
       } else if (global::lex.name == "continue") {
-        if (global::opened_operators.find("cycle") == global::opened_operators.end()) {
-          throw SyntaxError("'continue' is not in cycle in line:" + std::to_string(global::lex.num + 1));
-        }
+//        if (global::opened_operators.find("cycle") == global::opened_operators.end()) {
+//          throw SyntaxError("'continue' is not in cycle in line:" + std::to_string(global::lex.num + 1));
+//        }
         continue_();
       } else if (global::lex.name == "if") {
         global::tree_of_variables.create_scope();
@@ -266,13 +266,21 @@ void if_() {
     if (global::lex.type == LexemeType::Open_brace) {
       getLex();
       expression_();
+      int addr1 = global::poliz_stack.size();
+      global::poliz_stack.push_back(new PolizOperand(K_Variable_Type_Int, nullptr));
+      global::poliz_stack.push_back(new PolizOperator("F"));
       if (global::lex.type == LexemeType::Close_brace) {
         getLex();
         operator_();
+        int addr2 = global::poliz_stack.size();
+        global::poliz_stack.push_back(new PolizOperand(K_Variable_Type_Int, nullptr));
+        global::poliz_stack.push_back(new PolizOperator("Go", true));
+        global::poliz_stack[addr1]->upd(new int (global::poliz_stack.size()));
         if (global::lex.name == "else") {
           getLex();
           operator_();
         }
+        global::poliz_stack[addr2]->upd(new int(global::poliz_stack.size()));
       } else {
         throw SyntaxError((std::string("Expected ')' ") + std::to_string(global::lex.num + 1)));
       }
@@ -286,18 +294,47 @@ void if_() {
 void for_() {
   if (global::lex.name == "for") {
     getLex();
+    global::break_stack.emplace_back();
+    global::continue_stack.emplace_back();
     if (global::lex.type == LexemeType::Open_brace) {
       getLex();
       variables_declaration_();
       if (global::lex.type == LexemeType::Semicolon) {
         getLex();
+        int expression_addr = global::poliz_stack.size();
         expression_();
+        global::poliz_stack.pop_back();
+        //Сюда положим конец for'a
+        int addr1 = global::poliz_stack.size();
+        global::poliz_stack.push_back(new PolizOperand(K_Variable_Type_Int, nullptr));
+        global::poliz_stack.push_back(new PolizOperator("F"));
+        //Сюда положим начало тела цикла
+        int addr2 = global::poliz_stack.size();
+        global::poliz_stack.push_back( new PolizOperand(K_Variable_Type_Int, nullptr));
+        global::poliz_stack.push_back(new PolizOperator("Go", true));
         if (global::lex.type == LexemeType::Semicolon) {
+          int step_expr_addr = global::poliz_stack.size();
           getLex();
           expression_();
+          global::poliz_stack.pop_back();
+          global::poliz_stack.push_back(new PolizOperand(K_Variable_Type_Int, new int(expression_addr)));
+          global::poliz_stack.push_back((new PolizOperator("Go", true)));
+          //ПЕРЕХОД В ТЕЛО
+          global::poliz_stack[addr2]->upd(new int(global::poliz_stack.size()));
           if (global::lex.type == LexemeType::Close_brace) {
             getLex();
             operator_();
+            global::poliz_stack.push_back(new PolizOperand(K_Variable_Type_Int, new int(step_expr_addr)));
+            global::poliz_stack.push_back(new PolizOperator("Go", true));
+            global::poliz_stack[addr1]->upd(new int(global::poliz_stack.size()));
+            for(auto i : global::break_stack.back()){
+              global::poliz_stack[i]->upd(new int(global::poliz_stack.size()));
+            }
+            global::break_stack.pop_back();
+            for(auto i : global::continue_stack.back()){
+              global::poliz_stack[i]->upd(new int(step_expr_addr));
+            }
+            global::continue_stack.pop_back();
           } else {
             throw SyntaxError((std::string("Expected ')' ") + std::to_string(global::lex.num + 1)));
           }
@@ -317,12 +354,29 @@ void for_() {
 void while_() {
   if (global::lex.name == "while") {
     getLex();
+    global::break_stack.emplace_back();
+    global::continue_stack.emplace_back();
     if (global::lex.type == LexemeType::Open_brace) {
+      int expr_address = global::poliz_stack.size();
       getLex();
       expression_();
+      int addr1 = global::poliz_stack.size();
+      global::poliz_stack.push_back(new PolizOperand(K_Variable_Type_Int, nullptr));
+      global::poliz_stack.push_back(new PolizOperator("F"));
       if (global::lex.type == LexemeType::Close_brace) {
         getLex();
         operator_();
+        global::poliz_stack.push_back(new PolizOperand(K_Variable_Type_Int, new int(expr_address)));
+        global::poliz_stack.push_back(new PolizOperator("Go", true));
+        global::poliz_stack[addr1]->upd(new int(global::poliz_stack.size()));
+        for(auto i : global::break_stack.back()){
+          global::poliz_stack[i]->upd(new int(global::poliz_stack.size()));
+        }
+        global::break_stack.pop_back();
+        for(auto i : global::continue_stack.back()){
+          global::poliz_stack[i]->upd(new int(expr_address));
+        }
+        global::continue_stack.pop_back();
       } else {
         throw SyntaxError((std::string("Expected ')' ") + std::to_string(global::lex.num + 1)));
       }
@@ -598,9 +652,7 @@ Expression_Type expression3_() {
     if (is_plus && lhs.t == K_Variable_Type::K_Variable_Type_String
         && rhs.t == K_Variable_Type::K_Variable_Type_String) {
       lhs.is_lvalue = false;
-      continue;
-    }
-    if ((lhs.t != K_Variable_Type::K_Variable_Type_Int && lhs.t != K_Variable_Type::K_Variable_Type_Float)
+    } else if ((lhs.t != K_Variable_Type::K_Variable_Type_Int && lhs.t != K_Variable_Type::K_Variable_Type_Float)
         || (rhs.t != K_Variable_Type::K_Variable_Type_Int && rhs.t != K_Variable_Type::K_Variable_Type_Float)) {
       throw SyntaxError("'-' overloaded only for int and float  in line: " + std::to_string(global::lex.num + 1));
     }
@@ -727,7 +779,10 @@ Expression_Type expression_cool_() {
       } else {
         throw SyntaxError((std::string("Expected ')' ") + std::to_string(global::lex.num + 1)));
       }
-      return {global::function_table.check_id(cur_id.name, args_types).type_of_return, false};
+      auto cur_func = global::function_table.check_id(cur_id.name, args_types);
+      global::poliz_stack.push_back(new PolizOperator("func"));
+      dynamic_cast<PolizOperator*>(global::poliz_stack.back())->function = {cur_id.name, args_types};
+      return {cur_func.type_of_return, false};
     } else {
       if (global::tree_of_variables.check_id(cur_id.name) == K_Variable_Type::K_Variable_Type_NULLTYPE) {
         throw SyntaxError("No var " + cur_id.name + " in this scope" + std::string(" in line: ")
@@ -770,9 +825,15 @@ std::vector<Expression_Type> function_call_() {
 
 void break_() {
   if (global::lex.name == "break") {
+    if (global::break_stack.empty()){
+      throw SyntaxError("Break is not in cycle or switch in line: " + std::to_string(global::lex.num + 1));
+    }
     getLex();
     if (global::lex.type == LexemeType::Semicolon) {
       getLex();
+      global::break_stack.back().push_back(global::poliz_stack.size());
+      global::poliz_stack.push_back(new PolizOperand(K_Variable_Type_Int, nullptr));
+      global::poliz_stack.push_back(new PolizOperator("Go", true));
     } else {
       throw SyntaxError((std::string("Expected ';' ") + std::to_string(global::lex.num + 1)));
     }
@@ -782,9 +843,15 @@ void break_() {
 }
 void continue_() {
   if (global::lex.name == "continue") {
+    if (global::continue_stack.empty()){
+      throw SyntaxError("Continue is not in cycle or switch in line: " + std::to_string(global::lex.num + 1));
+    }
     getLex();
     if (global::lex.type == LexemeType::Semicolon) {
       getLex();
+      global::continue_stack.back().push_back(global::poliz_stack.size());
+      global::poliz_stack.push_back(new PolizOperand(K_Variable_Type_Int, nullptr));
+      global::poliz_stack.push_back(new PolizOperator("Go", true));
     } else {
       throw SyntaxError((std::string("Expected ';' ") + std::to_string(global::lex.num + 1)));
     }
