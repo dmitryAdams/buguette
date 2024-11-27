@@ -266,6 +266,7 @@ void if_() {
     if (global::lex.type == LexemeType::Open_brace) {
       getLex();
       expression_();
+      global::poliz_stack.pop_back();
       int addr1 = global::poliz_stack.size();
       global::poliz_stack.push_back(new PolizOperand(K_Variable_Type_Int, nullptr));
       global::poliz_stack.push_back(new PolizOperator("F"));
@@ -360,6 +361,7 @@ void while_() {
       int expr_address = global::poliz_stack.size();
       getLex();
       expression_();
+      global::poliz_stack.pop_back();
       int addr1 = global::poliz_stack.size();
       global::poliz_stack.push_back(new PolizOperand(K_Variable_Type_Int, nullptr));
       global::poliz_stack.push_back(new PolizOperator("F"));
@@ -877,6 +879,8 @@ void print_() {
     if (global::lex.type == LexemeType::Open_brace) {
       getLex();
       expression_();
+      global::poliz_stack.pop_back();
+      global::poliz_stack.push_back(new PolizOperator("Prn", true));
       if (global::lex.type == LexemeType::Close_brace) {
         getLex();
         if (global::lex.type == LexemeType::Semicolon) {
@@ -899,7 +903,12 @@ void scan_() {
     getLex();
     if (global::lex.type == LexemeType::Open_brace) {
       getLex();
-      identificator_();
+      auto arg = expression_();
+      if (!arg.is_lvalue) {
+          throw SemanticError((std::string("operator scan is only for l_value") + std::to_string(global::lex.num + 1)));
+      }
+      global::poliz_stack.pop_back();
+      global::poliz_stack.push_back(new PolizOperator("Scn", true));
       if (global::lex.type == LexemeType::Close_brace) {
         getLex();
         if (global::lex.type == LexemeType::Semicolon) {

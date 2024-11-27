@@ -29,15 +29,17 @@ int main() {
 //  try{
     starter();
     program_();
+    int j = 0;
     for(auto i : global::poliz_stack){
-//      if (i->is_operator()){
-//        auto p = dynamic_cast<PolizOperator*>(i);
-////        std::cerr << p;
-//      } else {
-//        auto p = dynamic_cast<PolizOperand*>(i);
-////        std::cerr << "aboba";
-//      }
-      std::cerr << *i << ' ';
+        if (i->is_operator()) {
+            auto p = dynamic_cast<PolizOperator*>(i);
+            if (!p->function.name.empty()) {
+                std::cout << j << ") " << p->function.name << '\n';
+                continue;
+            }
+        }
+      std::cout << j << ") " << *i << '\n';
+      ++j;
     }
 //  }
 //  catch (SyntaxError &e){

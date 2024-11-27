@@ -1,5 +1,13 @@
+
+def int min(int a, int b) {
+    if (a > b) return b;
+    else return a;
+}
+
 main(){
-    for(int b = 0; true; 0){
-        break;
-    }
+    int a, b, c;
+    scan(a);
+    scan(b);
+    scan(c);
+    print(min(a, min(b, c)));
 }

@@ -3,7 +3,7 @@
 
 void starter()
 {
-    std::ifstream fin("../sources/program.txt");
+    std::ifstream fin("../sources/program.txt", std::ios::binary);
     fin.seekg(0, std::ios::end);
     std::streampos fileSize = fin.tellg();
     fin.seekg(0, std::ios::beg);
@@ -16,12 +16,11 @@ void starter()
     for (int i = 0; i < fileSize; ++i)
     {
         if (c[i] == '\r') continue;
+        if (c[i] < 0) break;
         program.push_back(c[i]);
     }
     global::text = program;
-//    while(!global::text.empty() && global::text.back() == ' ' || global::text.back() == '\n'){
-//      global::text.pop_back();
-//    }
+
     std::ifstream service_words_in("../sources/services_words"),
                   types_in("../sources/types");
     std::string word;

@@ -36,6 +36,8 @@ enum KOperator {
   KO_Function_Call,
   KO_Go_False,
   KO_Go,
+  KO_PRN,
+  KO_SCN
 };
 
 #include "../../lib.h"
@@ -104,6 +106,10 @@ class PolizOperator : public StackElement {
         self_ = KO_Semicolon;
       } else if (operator_name == "Go") {
         self_ = KO_Go;
+      } else if (operator_name == "Prn") {
+          self_ = KO_PRN;
+      } else if (operator_name == "Scn") {
+          self_ = KO_SCN;
       } else {
 #ifdef DEBUG
         //TODO

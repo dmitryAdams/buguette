@@ -152,6 +152,10 @@ bool getLex() {
   if (global::text[global::ind] == '!' || global::text[global::ind] == '~') {
     cur_lex.push_back(global::text[global::ind]);
     ++global::ind;
+    if (global::text[global::ind] == '=') {
+        cur_lex.push_back(global::text[global::ind]);
+        ++global::ind;
+    }
     global::lex.type = Operator;
     global::lex.name = cur_lex;
     global::lex.num = global::string_number;
