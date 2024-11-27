@@ -1,13 +1,8 @@
-
-def int min(int a, int b) {
-    if (a > b) return b;
-    else return a;
+def int fact(int n) {
+    if (n == 1) return 1;
+    return fact(n - 1) * n;
 }
 
 main(){
-    int a, b, c;
-    scan(a);
-    scan(b);
-    scan(c);
-    print(min(a, min(b, c)));
+    print(fact(5));
 }

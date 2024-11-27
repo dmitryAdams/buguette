@@ -37,14 +37,15 @@ enum KOperator {
   KO_Go_False,
   KO_Go,
   KO_PRN,
-  KO_SCN
+  KO_SCN,
+  KO_RET
 };
 
 #include "../../lib.h"
 
 class PolizOperator : public StackElement {
  public:
-  PolizOperator(const std::string &operator_name, bool is_unary = false) {
+  explicit PolizOperator(const std::string &operator_name, bool is_unary = false) {
     string_representation_ = operator_name;
     if (!is_unary) {
       if (operator_name == "+") {
@@ -110,6 +111,8 @@ class PolizOperator : public StackElement {
           self_ = KO_PRN;
       } else if (operator_name == "Scn") {
           self_ = KO_SCN;
+      } else if (operator_name == "ret") {
+          self_ = KO_RET;
       } else {
 #ifdef DEBUG
         //TODO
@@ -118,9 +121,7 @@ class PolizOperator : public StackElement {
       }
     }
   }
-  void upd(void *) override {
-    return;
-  }
+  void upd(void *) override {}
   bool is_operator() override {
     return true;
   }

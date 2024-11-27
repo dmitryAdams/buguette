@@ -245,6 +245,8 @@ Expression_Type return_() {
   if (global::lex.name == "return") {
     getLex();
     auto ans = expression_();
+    global::poliz_stack.pop_back();
+    global::poliz_stack.push_back(new PolizOperator("ret", true));
     if (global::lex.type == LexemeType::Semicolon) {
       getLex();
       return ans;
@@ -389,27 +391,59 @@ void while_() {
 }
 void switch_() {
   if (global::lex.name == "switch") {
+    global::break_stack.emplace_back();
     getLex();
     if (global::lex.type == LexemeType::Open_brace) {
       getLex();
-      expression_();
+      auto lhs = global::poliz_stack.size();
+      auto tp = expression_();
+      std::vector<StackElement*> expr;
+
+      while(global::poliz_stack.size() > lhs) {
+          expr.push_back(global::poliz_stack.back());
+          global::poliz_stack.pop_back();
+      }
+      std::reverse(expr.begin(), expr.end());
+      expr.pop_back();
+
       if (global::lex.type == LexemeType::Close_brace) {
         getLex();
         if (global::lex.type == LexemeType::Open_curly_brace) {
           getLex();
           int cnt = 0;
+          std::vector<std::pair<PolizOperand*, int>> cases;
           while (global::lex.name == "case") {
             getLex();
             if (global::lex.type == LexemeType::Open_brace) {
               getLex();
               if (global::lex.type == LexemeType::Literal || global::lex.type == LexemeType::String_Literal) {
-                getLex();
-                if (global::lex.type == LexemeType::Close_brace) {
-                  getLex();
-                  operator_();
-                } else {
-                  throw SyntaxError((std::string("Expected ')' ") + std::to_string(global::lex.num + 1)));
-                }
+                if (global::lex.type == LexemeType::Literal &&
+                  (tp.t == K_Variable_Type_Int || tp.t == K_Variable_Type_Float)
+                  || global::lex.type == LexemeType::String_Literal &&
+                  (tp.t == K_Variable_Type_String)) {
+                    if (tp.t == K_Variable_Type_Float) {
+                        cases.emplace_back(
+                                new PolizOperand(K_Variable_Type_Float,
+                                new double(std::stod(global::lex.name))),
+                                global::poliz_stack.size());
+                    } else {
+                        cases.emplace_back(
+                                new PolizOperand(K_Variable_Type_Int,
+                                new int(std::stoi(global::lex.name))),
+                                global::poliz_stack.size());
+                    }
+
+                    getLex();
+                    if (global::lex.type == LexemeType::Close_brace) {
+                      getLex();
+                      operator_();
+                    } else {
+                        throw SyntaxError((std::string("Expected ')' ") + std::to_string(global::lex.num + 1)));
+                    }
+                  } else {
+                      throw SemanticError(std::string("Type expression must be type of case in line: "
+                      + std::to_string(global::lex.num + 1)));
+                  }
               } else {
                 throw SyntaxError((std::string("Expected 'literal' or 'string literal' ")
                     + std::to_string(global::lex.num + 1)));
@@ -427,6 +461,23 @@ void switch_() {
           }
           if (global::lex.type == LexemeType::Close_curly_brace) {
             getLex();
+            int adrEnd = global::poliz_stack.size();
+            global::poliz_stack.push_back(new PolizOperand(K_Variable_Type_Int, nullptr));
+            global::poliz_stack.push_back(new PolizOperator("Go", true));
+            for (auto& [op, adr] : cases) {
+                for (auto& to : expr) {
+                    global::poliz_stack.push_back(to);
+                }
+                global::poliz_stack.push_back(op);
+                global::poliz_stack.push_back(new PolizOperator("!="));
+                global::poliz_stack.push_back(new PolizOperand(K_Variable_Type_Int, new int(adr)));
+                global::poliz_stack.push_back(new PolizOperator("F"));
+            }
+            dynamic_cast<PolizOperand*>(global::poliz_stack[adrEnd])->upd(new int(global::poliz_stack.size()));
+            for (auto& to : global::break_stack.back()) {
+                dynamic_cast<PolizOperand*>(global::poliz_stack[to])->upd(new int(global::poliz_stack.size()));
+            }
+            global::break_stack.pop_back();
           } else {
             throw SyntaxError((std::string("Expected '}' ") + std::to_string(global::lex.num + 1)));
           }

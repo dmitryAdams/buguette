@@ -26,7 +26,7 @@
 #include "Generation/Operator/PolizOperator.h"
 #include "Generation/Operand/PolizOperand.h"
 int main() {
-//  try{
+  try{
     starter();
     program_();
     int j = 0;
@@ -35,20 +35,19 @@ int main() {
             auto p = dynamic_cast<PolizOperator*>(i);
             if (!p->function.name.empty()) {
                 std::cout << j << ") " << p->function.name << '\n';
+                ++j;
                 continue;
             }
         }
       std::cout << j << ") " << *i << '\n';
       ++j;
     }
-//  }
-//  catch (SyntaxError &e){
-//    std::cout << e.what() << '\n';
-//  }catch (SemanticError &e){
-//    std::cout << e.what() << '\n';
-//  }
-//  auto c = 'ok';
-//  std::cout << typeid(c).name() << ' ' << c <<  ' ' << (int)'o';
+  }
+  catch (SyntaxError &e){
+    std::cout << e.what() << '\n';
+  }catch (SemanticError &e){
+    std::cout << e.what() << '\n';
+  }
   return 0;
 }
 
