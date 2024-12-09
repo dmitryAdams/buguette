@@ -248,6 +248,7 @@ Expression_Type return_() {
     global::poliz_stack.pop_back();
     global::poliz_stack.push_back(new PolizOperator("ret", true));
     if (global::lex.type == LexemeType::Semicolon) {
+
       getLex();
       return ans;
     } else {
