@@ -30,6 +30,8 @@ add_executable(bugguette main.cpp
         Generation/Operand/PolizOperand.cpp
         Generation/Operator/PolizOperator.cpp
         Generation/StackElement/StackElement.cpp
+        run/run.h
+        run/run.cpp
 )
 
 add_compile_definitions("")

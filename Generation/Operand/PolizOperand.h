@@ -18,7 +18,7 @@ class PolizOperand : public StackElement {
     switch (element_type_) {
       case K_Variable_Type_Float:
         string_representation_ = "float_" + std::to_string(intptr_t(element_address_)) + "_"
-            + std::to_string(element_address_ ? *(float *) (element_address_) : 0);
+            + std::to_string(element_address_ ? *(double *) (element_address_) : 0);
         break;
       case K_Variable_Type_String:
         string_representation_ = "string_" + std::to_string(intptr_t(element_address_)) + "_"
@@ -73,7 +73,7 @@ class PolizOperand : public StackElement {
         break;
     }
   }
- private:
+// private:
   K_Variable_Type element_type_;
   void *element_address_;
 };

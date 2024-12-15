@@ -20,10 +20,10 @@ namespace global
     extern bool eof;
     extern Tree_variables_TID tree_of_variables;
     extern Function_TID function_table;
-//    extern std::multiset<std::string> opened_operators;
     extern std::vector<Expression_Type> stack_of_call;
     extern std::vector<StackElement*> poliz_stack;
     extern std::vector<std::vector<int>> break_stack, continue_stack;
+    extern std::vector<std::pair<K_Variable_Type, void *>> stack_of_calculations;
 };
 
 

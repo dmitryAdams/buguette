@@ -72,7 +72,7 @@ class Tree_variables_TID {
     }
     return nullptr;
   }
- private:
+// private:
   struct Node{
     Node *pred;
     variables_TID tid;

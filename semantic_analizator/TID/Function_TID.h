@@ -19,6 +19,7 @@ struct FunctionKey {
 struct value {
   K_Variable_Type type_of_return;
   std::vector<std::string> names_of_args;
+  int poliz_addr;
 };
 class Function_TID {
  public:
@@ -26,12 +27,12 @@ class Function_TID {
   void push_id(K_Variable_Type type,
                const std::string &name,
                const std::vector<Expression_Type> &args_types,
-               const std::vector<std::string> &args_names) {
+               const std::vector<std::string> &args_names, int addr) {
     if (tid.count({name, args_types})) {
       //TODO
       throw SemanticError("multiply definition of function " + name);
     }
-    tid[{name, args_types}] = {type, args_names};
+    tid[{name, args_types}] = {type, args_names, addr};
   }
   value check_id(const std::string &name,
                  const std::vector<Expression_Type> &args_types) {

@@ -14,6 +14,7 @@ class StackElement {
     return out;
   }
   virtual void upd(void *) = 0;
+  virtual ~StackElement() = default;
  protected:
   std::string string_representation_;
 };

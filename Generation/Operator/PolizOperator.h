@@ -28,10 +28,7 @@ enum KOperator {
   KO_Not,
   KO_Plus_Increment,
   KO_Minus_Increment,
-  KO_Open_Brace,
-  KO_CLose_Brace,
   KO_Open_Square_Brace,
-  KO_Close_Square_Brace,
   KO_Semicolon,
   KO_Function_Call,
   KO_Go_False,
@@ -126,7 +123,7 @@ class PolizOperator : public StackElement {
     return true;
   }
   FunctionKey function;
- private:
+// private:
   KOperator self_;
 //  std::string string_representation_;
 };
