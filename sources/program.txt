@@ -1,3 +1,9 @@
 main(){
-    int x = 20000000000;
+    switch(5) {
+        case (3) {
+            print(3);
+        } case(5) {
+            print(4);
+        }
+    }
 }

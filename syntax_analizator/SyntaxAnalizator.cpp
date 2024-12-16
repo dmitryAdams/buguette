@@ -287,12 +287,12 @@ void if_() {
         int addr2 = global::poliz_stack.size();
         global::poliz_stack.push_back(new PolizOperand(K_Variable_Type_Int, nullptr));
         global::poliz_stack.push_back(new PolizOperator("Go", true));
-        global::poliz_stack[addr1]->upd(new int(global::poliz_stack.size()));
+        global::poliz_stack[addr1]->upd(new std::vector<void *>(1, new int(global::poliz_stack.size())));
         if (global::lex.name == "else") {
           getLex();
           operator_();
         }
-        global::poliz_stack[addr2]->upd(new int(global::poliz_stack.size()));
+        global::poliz_stack[addr2]->upd(new std::vector<void *>(1, new int(global::poliz_stack.size())));
       } else {
         throw SyntaxError((std::string("Expected ')' ") + std::to_string(global::lex.num + 1)));
       }
@@ -331,22 +331,24 @@ void for_() {
           expression_();
           delete global::poliz_stack.back();
           global::poliz_stack.pop_back();
-          global::poliz_stack.push_back(new PolizOperand(K_Variable_Type_Int, new int(expression_addr)));
+          global::poliz_stack.push_back(new PolizOperand(K_Variable_Type_Int,
+                                                         new std::vector<void *>(1, new int(expression_addr))));
           global::poliz_stack.push_back((new PolizOperator("Go", true)));
           //ПЕРЕХОД В ТЕЛО
-          global::poliz_stack[addr2]->upd(new int(global::poliz_stack.size()));
+          global::poliz_stack[addr2]->upd(new std::vector<void *>(1, new int(global::poliz_stack.size())));
           if (global::lex.type == LexemeType::Close_brace) {
             getLex();
             operator_();
-            global::poliz_stack.push_back(new PolizOperand(K_Variable_Type_Int, new int(step_expr_addr)));
+            global::poliz_stack.push_back(new PolizOperand(K_Variable_Type_Int,
+                                                           new std::vector<void *>(1, new int(step_expr_addr))));
             global::poliz_stack.push_back(new PolizOperator("Go", true));
-            global::poliz_stack[addr1]->upd(new int(global::poliz_stack.size()));
+            global::poliz_stack[addr1]->upd(new std::vector<void *>(1, new int(global::poliz_stack.size())));
             for (auto i : global::break_stack.back()) {
-              global::poliz_stack[i]->upd(new int(global::poliz_stack.size()));
+              global::poliz_stack[i]->upd(new std::vector<void *>(1, new int(global::poliz_stack.size())));
             }
             global::break_stack.pop_back();
             for (auto i : global::continue_stack.back()) {
-              global::poliz_stack[i]->upd(new int(step_expr_addr));
+              global::poliz_stack[i]->upd(new std::vector<void *>(1, new int(global::poliz_stack.size())));
             }
             global::continue_stack.pop_back();
           } else {
@@ -382,15 +384,16 @@ void while_() {
       if (global::lex.type == LexemeType::Close_brace) {
         getLex();
         operator_();
-        global::poliz_stack.push_back(new PolizOperand(K_Variable_Type_Int, new int(expr_address)));
+        global::poliz_stack.push_back(new PolizOperand(K_Variable_Type_Int,
+                                                       new std::vector<void *>(1, new int(expr_address))));
         global::poliz_stack.push_back(new PolizOperator("Go", true));
-        global::poliz_stack[addr1]->upd(new int(global::poliz_stack.size()));
+        global::poliz_stack[addr1]->upd(new std::vector<void *>(1, new int(global::poliz_stack.size())));
         for (auto i : global::break_stack.back()) {
-          global::poliz_stack[i]->upd(new int(global::poliz_stack.size()));
+          global::poliz_stack[i]->upd(new std::vector<void *>(1, new int(global::poliz_stack.size())));
         }
         global::break_stack.pop_back();
         for (auto i : global::continue_stack.back()) {
-          global::poliz_stack[i]->upd(new int(expr_address));
+          global::poliz_stack[i]->upd(new std::vector<void *>(1, new int(expr_address)));
         }
         global::continue_stack.pop_back();
       } else {
@@ -413,12 +416,13 @@ void switch_() {
 
       while (global::poliz_stack.size() > lhs) {
         expr.push_back(global::poliz_stack.back());
-        delete global::poliz_stack.back();
         global::poliz_stack.pop_back();
       }
       std::reverse(expr.begin(), expr.end());
       expr.pop_back();
-
+      int add_first_go = global::poliz_stack.size();
+      global::poliz_stack.push_back(new PolizOperand(K_Variable_Type_Int, nullptr));
+      global::poliz_stack.push_back(new PolizOperator("Go", true));
       if (global::lex.type == LexemeType::Close_brace) {
         getLex();
         if (global::lex.type == LexemeType::Open_curly_brace) {
@@ -437,12 +441,12 @@ void switch_() {
                   if (tp.t == K_Variable_Type_Float) {
                     cases.emplace_back(
                         new PolizOperand(K_Variable_Type_Float,
-                                         new double(std::stod(global::lex.name))),
+                                         new std::vector<void *>(1, new double(std::stod(global::lex.name)))),
                         global::poliz_stack.size());
                   } else {
                     cases.emplace_back(
                         new PolizOperand(K_Variable_Type_Int,
-                                         new int(std::stoi(global::lex.name))),
+                                         new std::vector<void *>(1, new int(std::stoi(global::lex.name)))),
                         global::poliz_stack.size());
                   }
 
@@ -477,18 +481,23 @@ void switch_() {
             int adrEnd = global::poliz_stack.size();
             global::poliz_stack.push_back(new PolizOperand(K_Variable_Type_Int, nullptr));
             global::poliz_stack.push_back(new PolizOperator("Go", true));
+            dynamic_cast<PolizOperand *>(global::poliz_stack[add_first_go])->upd(new std::vector<void *>(1,
+                                                                                                         new int(global::poliz_stack.size())));
             for (auto &[op, adr] : cases) {
               for (auto &to : expr) {
                 global::poliz_stack.push_back(to);
               }
               global::poliz_stack.push_back(op);
               global::poliz_stack.push_back(new PolizOperator("!="));
-              global::poliz_stack.push_back(new PolizOperand(K_Variable_Type_Int, new int(adr)));
+              global::poliz_stack.push_back(new PolizOperand(K_Variable_Type_Int,
+                                                             new std::vector<void *>(1, new int(adr))));
               global::poliz_stack.push_back(new PolizOperator("F"));
             }
-            dynamic_cast<PolizOperand *>(global::poliz_stack[adrEnd])->upd(new int(global::poliz_stack.size()));
+            dynamic_cast<PolizOperand *>(global::poliz_stack[adrEnd])->upd(new std::vector<void *>(1,
+                                                                                                   new int(global::poliz_stack.size())));
             for (auto &to : global::break_stack.back()) {
-              dynamic_cast<PolizOperand *>(global::poliz_stack[to])->upd(new int(global::poliz_stack.size()));
+              dynamic_cast<PolizOperand *>(global::poliz_stack[to])->upd(new std::vector<void *>(1,
+                                                                                                 new int(global::poliz_stack.size())));
             }
             global::break_stack.pop_back();
           } else {
@@ -528,7 +537,8 @@ void variables_declaration_() {
           throw SyntaxError("Array size is only int literal in line: " + std::to_string(global::lex.num + 1));
         }
         auto sz = std::stoi(sz_str);
-        static_cast<std::vector<int> *>(global::tree_of_variables.getAdress(cur_array_name.name))->resize(sz);
+        static_cast<std::vector<int> *>(((std::vector<void *> *) (global::tree_of_variables.getAdress(cur_array_name.name)))->back())->resize(
+            sz);
         if (global::lex.type == LexemeType::Close_square_brace) {
           getLex();
         } else {
@@ -758,9 +768,15 @@ Expression_Type expression2_() {
     auto cur_id = global::lex.name;
     getLex();
     auto rhs = expression1_();
-    if ((lhs.t != K_Variable_Type::K_Variable_Type_Int && lhs.t != K_Variable_Type::K_Variable_Type_Float)
-        || (rhs.t != K_Variable_Type::K_Variable_Type_Int && rhs.t != K_Variable_Type::K_Variable_Type_Float)) {
-      throw SyntaxError("* / % overloaded only for int and float  in line: " + std::to_string(global::lex.num + 1));
+    if (cur_id == "%") {
+      if (lhs.t != K_Variable_Type_Int || rhs.t != K_Variable_Type_Int) {
+        throw SyntaxError("% overloaded only for int  in line: " + std::to_string(global::lex.num + 1));
+      }
+    } else {
+      if ((lhs.t != K_Variable_Type::K_Variable_Type_Int && lhs.t != K_Variable_Type::K_Variable_Type_Float)
+          || (rhs.t != K_Variable_Type::K_Variable_Type_Int && rhs.t != K_Variable_Type::K_Variable_Type_Float)) {
+        throw SyntaxError("* / overloaded only for int and float  in line: " + std::to_string(global::lex.num + 1));
+      }
     }
     global::poliz_stack.push_back(new PolizOperator(cur_id));
     if (lhs.t != K_Variable_Type::K_Variable_Type_Float)lhs = rhs;

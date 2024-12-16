@@ -1,4 +1,4 @@
-
+//#define _GLIBCXX_DEBUG
 #include "globalVariables.h"
 #include "starter.h"
 #include "lexer/lexer.h"
@@ -25,6 +25,7 @@
 #include "./semantic_analizator/SemanticError/SemanticError.h"
 #include "Generation/Operator/PolizOperator.h"
 #include "Generation/Operand/PolizOperand.h"
+#include "run/run.h"
 int main() {
   try{
     starter();
@@ -48,6 +49,7 @@ int main() {
   }catch (SemanticError &e){
     std::cout << e.what() << '\n';
   }
+  run(0, std::map<std::pair<K_Variable_Type, std::vector<void *> *>, bool>());
   return 0;
 }
 
