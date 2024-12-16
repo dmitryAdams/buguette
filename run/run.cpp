@@ -396,7 +396,46 @@ void run(int poliz_ind, const std::map<std::pair<K_Variable_Type, std::vector<vo
       } else if (cur_operator->self_ == KOperator::KO_Semicolon) {
         global::stack_of_calculations.pop_back();
       } else if (cur_operator->self_ == KOperator::KO_Function_Call) {
-        //TODO
+        auto res = global::function_table.check_id(cur_operator->function);
+        auto next_init = init;
+        for (int i = (int) cur_operator->function.types_of_args.size() - 1; i >= 0; --i) {
+          auto cur_operand = dynamic_cast<PolizOperand *>(global::poliz_stack[res.poliz_addr + i * 2]);
+          auto cur_el = ((std::vector<void *> *) (cur_operand->element_address_))->back();
+          if (cur_operand->element_type_ == K_Variable_Type::K_Variable_Type_Int) {
+            ((std::vector<void *> *) (cur_operand->element_address_))->push_back(new int(*((int *) (cur_el))));
+          } else if (cur_operand->element_type_ == K_Variable_Type::K_Variable_Type_Bool) {
+            ((std::vector<void *> *) (cur_operand->element_address_))->push_back(new bool(*((bool *) (cur_el))));
+          } else if (cur_operand->element_type_ == K_Variable_Type::K_Variable_Type_Float) {
+            ((std::vector<void *> *) (cur_operand->element_address_))->push_back(new double(*((double *) (cur_el))));
+          } else if (cur_operand->element_type_ == K_Variable_Type::K_Variable_Type_Char) {
+            ((std::vector<void *> *) (cur_operand->element_address_))->push_back(new char(*((char *) (cur_el))));
+          } else if (cur_operand->element_type_ == K_Variable_Type::K_Variable_Type_String) {
+            ((std::vector<void *> *) (cur_operand->element_address_))->push_back(new std::string(*((std::string *) (cur_el))));
+          } else if (cur_operand->element_type_ == K_Variable_Type::K_Variable_Type_Array) {
+            ((std::vector<void *> *) (cur_operand->element_address_))->push_back(new std::vector<int>(*((std::vector<
+                int> *) (cur_el))));
+          }
+          next_init[{cur_operand->element_type_, (std::vector<void *> *) cur_operand->element_address_}] = true;
+
+          auto lhs = std::make_pair(cur_operand->element_type_,
+                                    ((std::vector<void *> *) (cur_operand->element_address_))->back());
+          auto rhs = global::stack_of_calculations.back();
+          global::stack_of_calculations.pop_back();
+          if (lhs.first == K_Variable_Type_Int) {
+            *(int *) (lhs.second) = *(int *) (rhs.second);
+          } else if (lhs.first == K_Variable_Type_Float) {
+            *(double *) (lhs.second) = *(double *) (rhs.second);
+          } else if (lhs.first == K_Variable_Type_String) {
+            *(std::string *) (lhs.second) = *(std::string *) (rhs.second);
+          } else if (lhs.first == K_Variable_Type_Array) {
+            *(std::vector<int> *) (lhs.second) = *(std::vector<int> *) (rhs.second);
+          } else if (lhs.first == K_Variable_Type_Bool) {
+            *(bool *) (lhs.second) = *(bool *) (rhs.second);
+          } else if (lhs.first == K_Variable_Type_Char) {
+            *(char *) (lhs.second) = *(char *) (rhs.second);
+          }
+        }
+        run(res.poliz_addr + cur_operator->function.types_of_args.size() * 2, next_init);
       } else if (cur_operator->self_ == KOperator::KO_Go_False) {
         auto rhs = global::stack_of_calculations.back();
         global::stack_of_calculations.pop_back();
@@ -443,7 +482,7 @@ void run(int poliz_ind, const std::map<std::pair<K_Variable_Type, std::vector<vo
           std::cin >> *(char *) (lhs.second);
         }
       } else if (cur_operator->self_ == KOperator::KO_RET) {
-
+        break;
       }
       //operator
     } else {
@@ -474,6 +513,19 @@ void run(int poliz_ind, const std::map<std::pair<K_Variable_Type, std::vector<vo
   for (auto &[i, j] : used) {
     if (!init.count(i)) {
       //TODO Пофиксить утечку памяти
+      if (i.first == K_Variable_Type_Int) {
+        delete (int *) (i.second->back());
+      } else if (i.first == K_Variable_Type_Bool) {
+        delete (bool *) (i.second->back());
+      } else if (i.first == K_Variable_Type_Float) {
+        delete (double *) (i.second->back());
+      } else if (i.first == K_Variable_Type_Char) {
+        delete (char *) (i.second->back());
+      } else if (i.first == K_Variable_Type_String) {
+        delete (std::string *) (i.second->back());
+      } else if (i.first == K_Variable_Type_Array) {
+        delete (std::vector<int> *) (i.second->back());
+      }
       i.second->pop_back();
     }
   }

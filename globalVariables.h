@@ -15,6 +15,7 @@ namespace global
     extern Trie service_words_trie, types_trie;
     extern lexeme lex;
     extern int ind;
+    extern int start_pos_on_poliz;
     extern std::string text;
     extern int string_number;
     extern bool eof;

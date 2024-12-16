@@ -61,6 +61,7 @@ void program_() {
 }
 
 void main_() {
+  global::start_pos_on_poliz = global::poliz_stack.size();
   if (global::lex.name == "main") {
     getLex();
     if (global::lex.name == "(") {
@@ -102,6 +103,7 @@ void function_() {
       getLex();
       std::vector<Expression_Type> args_types;
       std::vector<std::string> args_names;
+      int function_start = global::poliz_stack.size();
       if (global::lex.type != LexemeType::Close_brace) {
         auto cur_type = global::lex;
         args_types.push_back({type_by_name(cur_type.name), false});
@@ -110,6 +112,9 @@ void function_() {
         args_names.push_back(cur_lex.name);
         identificator_();
         global::tree_of_variables.push_id(cur_lex.name, cur_type.name);
+        global::poliz_stack.push_back(new PolizOperand(global::tree_of_variables.check_id(cur_lex.name),
+                                                       global::tree_of_variables.getAdress(cur_lex.name)));
+        global::poliz_stack.push_back(new PolizOperator(";", true));
       }
       while (global::lex.type == LexemeType::Comma) {
         getLex();
@@ -120,10 +125,13 @@ void function_() {
         args_names.push_back(cur_lex.name);
         identificator_();
         global::tree_of_variables.push_id(cur_lex.name, cur_type.name);
+        global::poliz_stack.push_back(new PolizOperand(global::tree_of_variables.check_id(cur_lex.name),
+                                                       global::tree_of_variables.getAdress(cur_lex.name)));
+        global::poliz_stack.push_back(new PolizOperator(";", true));
       }
       if (global::lex.name == ")") {
         getLex();
-        global::function_table.push_id(return_type, name.name, args_types, args_names, global::poliz_stack.size());
+        global::function_table.push_id(return_type, name.name, args_types, args_names, function_start);
         if (global::lex.name == "{") {
           getLex();
           block_();
@@ -411,6 +419,7 @@ void switch_() {
     if (global::lex.type == LexemeType::Open_brace) {
       getLex();
       auto lhs = global::poliz_stack.size();
+      //TODO переписать на идентификатор
       auto tp = expression_();
       std::vector<StackElement *> expr;
 
@@ -429,6 +438,7 @@ void switch_() {
           getLex();
           int cnt = 0;
           std::vector<std::pair<PolizOperand *, int>> cases;
+          std::vector<std::pair<PolizOperand *, int>> els;
           while (global::lex.name == "case") {
             getLex();
             if (global::lex.type == LexemeType::Open_brace) {
@@ -957,7 +967,7 @@ void break_() {
 void continue_() {
   if (global::lex.name == "continue") {
     if (global::continue_stack.empty()) {
-      throw SyntaxError("Continue is not in cycle or switch in line: " + std::to_string(global::lex.num + 1));
+      throw SyntaxError("Continue is not in cycle in line: " + std::to_string(global::lex.num + 1));
     }
     getLex();
     if (global::lex.type == LexemeType::Semicolon) {

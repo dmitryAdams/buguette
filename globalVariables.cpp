@@ -14,5 +14,5 @@ namespace global
     std::vector<StackElement*> poliz_stack = std::vector<StackElement*>();
     std::vector<std::vector<int>> break_stack, continue_stack;
     std::vector<std::pair<K_Variable_Type, void *>> stack_of_calculations;
-
+    int start_pos_on_poliz = 0;
 };

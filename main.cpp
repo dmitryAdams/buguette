@@ -27,6 +27,7 @@
 #include "Generation/Operand/PolizOperand.h"
 #include "run/run.h"
 int main() {
+
   try{
     starter();
     program_();
@@ -49,7 +50,7 @@ int main() {
   }catch (SemanticError &e){
     std::cout << e.what() << '\n';
   }
-  run(0, std::map<std::pair<K_Variable_Type, std::vector<void *> *>, bool>());
+  run(global::start_pos_on_poliz, std::map<std::pair<K_Variable_Type, std::vector<void *> *>, bool>());
   return 0;
 }
 
