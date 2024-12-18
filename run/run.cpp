@@ -159,7 +159,6 @@ void run(int poliz_ind, const std::map<std::pair<K_Variable_Type, std::vector<vo
           global::stack_of_calculations.emplace_back(K_Variable_Type_Bool, new bool(l < r));
         }
       } else if (cur_operator->self_ == KOperator::KO_Greater) {
-
         auto rhs = global::stack_of_calculations.back();
         global::stack_of_calculations.pop_back();
         auto lhs = global::stack_of_calculations.back();
@@ -189,7 +188,6 @@ void run(int poliz_ind, const std::map<std::pair<K_Variable_Type, std::vector<vo
           auto r = *(char *) (rhs.second);
           global::stack_of_calculations.emplace_back(K_Variable_Type_Bool, new bool(l > r));
         }
-
       } else if (cur_operator->self_ == KOperator::KO_Equal) {
         auto rhs = global::stack_of_calculations.back();
         global::stack_of_calculations.pop_back();
@@ -436,6 +434,10 @@ void run(int poliz_ind, const std::map<std::pair<K_Variable_Type, std::vector<vo
           }
         }
         run(res.poliz_addr + cur_operator->function.types_of_args.size() * 2, next_init);
+        for (int i = (int) cur_operator->function.types_of_args.size() - 1; i >= 0; --i) {
+          auto cur_operand = dynamic_cast<PolizOperand *>(global::poliz_stack[res.poliz_addr + i * 2]);
+          ((std::vector<void *> *) cur_operand->element_address_)->pop_back();
+        }
       } else if (cur_operator->self_ == KOperator::KO_Go_False) {
         auto rhs = global::stack_of_calculations.back();
         global::stack_of_calculations.pop_back();
@@ -467,6 +469,7 @@ void run(int poliz_ind, const std::map<std::pair<K_Variable_Type, std::vector<vo
         } else if (lhs.first == K_Variable_Type_Char) {
           std::cout << *(char *) (lhs.second);
         }
+        std::cout.flush();
       } else if (cur_operator->self_ == KOperator::KO_SCN) {
         auto lhs = global::stack_of_calculations.back();
         global::stack_of_calculations.pop_back();
@@ -512,7 +515,6 @@ void run(int poliz_ind, const std::map<std::pair<K_Variable_Type, std::vector<vo
   }
   for (auto &[i, j] : used) {
     if (!init.count(i)) {
-      //TODO Пофиксить утечку памяти
       if (i.first == K_Variable_Type_Int) {
         delete (int *) (i.second->back());
       } else if (i.first == K_Variable_Type_Bool) {

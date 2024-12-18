@@ -917,7 +917,7 @@ Expression_Type expression_cool_() {
     }
   } else if (global::lex.type == LexemeType::Open_brace) {
     getLex();
-    auto lhs = expression_();
+    auto lhs = expression10_();
     if (global::lex.type == LexemeType::Close_brace) {
       getLex();
     } else {

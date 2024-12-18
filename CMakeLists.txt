@@ -34,7 +34,7 @@ add_executable(bugguette main.cpp
         run/run.cpp
 )
 
-add_compile_definitions("")
-add_compile_definitions("DEBUG")
+#add_compile_definitions("_GLIBCXX_DEBUG")
+#add_compile_definitions("DEBUG")
 
 
