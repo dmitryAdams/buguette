@@ -8,6 +8,7 @@
 
 class StackElement {
  public:
+  /// Метод, необходимый для правильной разименовки объектов из global::poliz_stack
   virtual bool is_operator() = 0;
   friend std::ostream &operator<<(std::ostream &out, const StackElement &po){
     out << po.string_representation_;

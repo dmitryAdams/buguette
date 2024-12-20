@@ -1,6 +1,5 @@
 var searchData=
 [
-  ['semanticerror_0',['SemanticError',['../classSemanticError.html',1,'']]],
-  ['stackelement_1',['StackElement',['../classStackElement.html',1,'']]],
-  ['syntaxerror_2',['SyntaxError',['../classSyntaxError.html',1,'']]]
+  ['polizoperand_0',['PolizOperand',['../classPolizOperand.html',1,'']]],
+  ['polizoperator_1',['PolizOperator',['../classPolizOperator.html',1,'']]]
 ];

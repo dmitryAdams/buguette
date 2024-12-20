@@ -91,6 +91,11 @@ $(function(){ initResizable(false); });
   <div class="headertitle"><div class="title">Класс PolizOperand</div></div>
 </div><!--header-->
 <div class="contents">
+
+<p>Класс отвечающий за хранение операндов, в формате необходимом Интерпретатору  
+ <a href="#details">Подробнее...</a></p>
+
+<p><code>#include &lt;<a class="el" href="PolizOperand_8h_source.html">PolizOperand.h</a>&gt;</code></p>
 <div class="dynheader">
 Граф наследования:PolizOperand:</div>
 <div class="dyncontent">
@@ -104,11 +109,13 @@ $(function(){ initResizable(false); });
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Открытые члены</h2></td></tr>
 <tr class="memitem:af42c0323eb6a9edb6951f7fd2eacd855" id="r_af42c0323eb6a9edb6951f7fd2eacd855"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af42c0323eb6a9edb6951f7fd2eacd855">is_operator</a> () override</td></tr>
+<tr class="memdesc:af42c0323eb6a9edb6951f7fd2eacd855"><td class="mdescLeft">&#160;</td><td class="mdescRight">Метод, необходимый для правильной разименовки объектов из global::poliz_stack.  <br /></td></tr>
 <tr class="separator:af42c0323eb6a9edb6951f7fd2eacd855"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abd620fe9f390dd694ba9308f11e41e22" id="r_abd620fe9f390dd694ba9308f11e41e22"><td class="memItemLeft" align="right" valign="top"><a id="abd620fe9f390dd694ba9308f11e41e22" name="abd620fe9f390dd694ba9308f11e41e22"></a>
 &#160;</td><td class="memItemRight" valign="bottom"><b>PolizOperand</b> (K_Variable_Type type_, void *address)</td></tr>
 <tr class="separator:abd620fe9f390dd694ba9308f11e41e22"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac7b4af5c71d5a5d1469c7442a9babe3b" id="r_ac7b4af5c71d5a5d1469c7442a9babe3b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac7b4af5c71d5a5d1469c7442a9babe3b">upd</a> (void *new_addr) override</td></tr>
+<tr class="memdesc:ac7b4af5c71d5a5d1469c7442a9babe3b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Обновляет информацию об объекте лежащем по element_address_, в случае изменения этого адреса  <br /></td></tr>
 <tr class="separator:ac7b4af5c71d5a5d1469c7442a9babe3b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_methods_classStackElement"><td colspan="2" onclick="javascript:dynsection.toggleInherit('pub_methods_classStackElement')"><img src="closed.png" alt="-"/>&#160;Открытые члены унаследованные от <a class="el" href="classStackElement.html">StackElement</a></td></tr>
 </table><table class="memberdecls">
@@ -128,7 +135,9 @@ void *&#160;</td><td class="memItemRight" valign="bottom"><b>element_address_</b
 std::string&#160;</td><td class="memItemRight" valign="bottom"><b>string_representation_</b></td></tr>
 <tr class="separator:a1a23b43c27a2c3eb6c5b661aa86fd819 inherit pro_attribs_classStackElement"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<h2 class="groupheader">Методы</h2>
+<a name="details" id="details"></a><h2 class="groupheader">Подробное описание</h2>
+<div class="textblock"><p>Класс отвечающий за хранение операндов, в формате необходимом Интерпретатору </p>
+</div><h2 class="groupheader">Методы</h2>
 <a id="af42c0323eb6a9edb6951f7fd2eacd855" name="af42c0323eb6a9edb6951f7fd2eacd855"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#af42c0323eb6a9edb6951f7fd2eacd855">&#9670;&#160;</a></span>is_operator()</h2>
 
@@ -152,7 +161,9 @@ std::string&#160;</td><td class="memItemRight" valign="bottom"><b>string_represe
 </table>
 </div><div class="memdoc">
 
-<p>Замещает <a class="el" href="classStackElement.html">StackElement</a>.</p>
+<p>Метод, необходимый для правильной разименовки объектов из global::poliz_stack. </p>
+
+<p>Замещает <a class="el" href="classStackElement.html#a000603e67c75a559486577a8d7229847">StackElement</a>.</p>
 
 </div>
 </div>
@@ -178,6 +189,8 @@ std::string&#160;</td><td class="memItemRight" valign="bottom"><b>string_represe
   </tr>
 </table>
 </div><div class="memdoc">
+
+<p>Обновляет информацию об объекте лежащем по element_address_, в случае изменения этого адреса </p>
 
 <p>Замещает <a class="el" href="classStackElement.html">StackElement</a>.</p>
 

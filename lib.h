@@ -5,6 +5,11 @@
 #include <string>
 #include "map"
 
+/**
+\brief Данный enum отвечает за типы, которые поддерживает интерпретатор
+*Чтобы добавить новый тип, его нужно внести сюда
+*\warning соблюдайте нейминг
+*/
 enum K_Variable_Type {
   K_Variable_Type_Int,
   K_Variable_Type_Float,
@@ -15,6 +20,11 @@ enum K_Variable_Type {
   K_Variable_Type_NULLTYPE
 };
 
+/**
+\brief Структура отвечающая за типы которые могут возвращать выражения.
+
+ * Соответственно сам тип и является ли lvalue
+*/
 struct Expression_Type {
   K_Variable_Type t;
   bool is_lvalue;

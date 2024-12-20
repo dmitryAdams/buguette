@@ -6,6 +6,7 @@
 #define BUGGUETTE_GENERATION_POLIZOPERATOR_H_
 #include "../StackElement/StackElement.h"
 #include "../../semantic_analizator/TID/Function_TID.h"
+/// \brief Виды Операторов
 enum KOperator {
   KO_Bin_Plus,
   KO_Bin_Minus,
@@ -84,10 +85,6 @@ class PolizOperator : public StackElement {
       } else if (operator_name == "F") {
         self_ = KO_Go_False;
       } else {
-#ifdef DEBUG
-        //TODO
-        throw std::logic_error("INVALID OPERATOR");
-#endif
       }
     } else {
       if (operator_name == "+") {
@@ -110,11 +107,6 @@ class PolizOperator : public StackElement {
           self_ = KO_SCN;
       } else if (operator_name == "ret") {
           self_ = KO_RET;
-      } else {
-#ifdef DEBUG
-        //TODO
-        throw std::logic_error("INVALID OPERATOR");
-#endif
       }
     }
   }

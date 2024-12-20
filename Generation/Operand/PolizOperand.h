@@ -9,6 +9,9 @@
 #include "../../lib.h"
 #include "cstdint"
 
+/**
+ * \brief Класс отвечающий за хранение операндов, в формате необходимом Интерпретатору
+ */
 class PolizOperand : public StackElement {
  public:
   bool is_operator() override {
@@ -43,6 +46,7 @@ class PolizOperand : public StackElement {
         break;
     }
   }
+  /// Обновляет информацию об объекте лежащем по element_address_, в случае изменения этого адреса
   void upd(void *new_addr) override {
     element_address_ = new_addr;
     switch (element_type_) {

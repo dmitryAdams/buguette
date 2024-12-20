@@ -1,5 +1,4 @@
 var searchData=
 [
-  ['polizoperand_0',['PolizOperand',['../classPolizOperand.html',1,'']]],
-  ['polizoperator_1',['PolizOperator',['../classPolizOperator.html',1,'']]]
+  ['node_0',['Node',['../structTree__variables__TID_1_1Node.html',1,'Tree_variables_TID']]]
 ];

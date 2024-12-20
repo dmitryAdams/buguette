@@ -1,5 +1,6 @@
 var searchData=
 [
-  ['tree_5fvariables_5ftid_0',['Tree_variables_TID',['../classTree__variables__TID.html',1,'']]],
-  ['trie_1',['Trie',['../classTrie.html',1,'']]]
+  ['semanticerror_0',['SemanticError',['../classSemanticError.html',1,'']]],
+  ['stackelement_1',['StackElement',['../classStackElement.html',1,'']]],
+  ['syntaxerror_2',['SyntaxError',['../classSyntaxError.html',1,'']]]
 ];
