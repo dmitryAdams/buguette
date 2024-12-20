@@ -10,6 +10,7 @@ void program_();
 void main_();
 void function_();
 void type_();
+
 void identificator_();
 void operator_();
 Expression_Type return_();
