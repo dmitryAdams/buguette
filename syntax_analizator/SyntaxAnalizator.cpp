@@ -295,12 +295,12 @@ void if_() {
         int addr2 = global::poliz_stack.size();
         global::poliz_stack.push_back(new PolizOperand(K_Variable_Type_Int, nullptr));
         global::poliz_stack.push_back(new PolizOperator("Go", true));
-        global::poliz_stack[addr1]->upd(new std::vector<void *>(1, new int(global::poliz_stack.size())));
+//        global::poliz_stack[addr1]->upd(new std::vector<void *>(1, new int(global::poliz_stack.size())));
         if (global::lex.name == "else") {
           getLex();
           operator_();
         }
-        global::poliz_stack[addr2]->upd(new std::vector<void *>(1, new int(global::poliz_stack.size())));
+//        global::poliz_stack[addr2]->upd(new std::vector<void *>(1, new int(global::poliz_stack.size())));
       } else {
         throw SyntaxError((std::string("Expected ')' ") + std::to_string(global::lex.num + 1)));
       }
@@ -343,20 +343,20 @@ void for_() {
                                                          new std::vector<void *>(1, new int(expression_addr))));
           global::poliz_stack.push_back((new PolizOperator("Go", true)));
           //ПЕРЕХОД В ТЕЛО
-          global::poliz_stack[addr2]->upd(new std::vector<void *>(1, new int(global::poliz_stack.size())));
+//          global::poliz_stack[addr2]->upd(new std::vector<void *>(1, new int(global::poliz_stack.size())));
           if (global::lex.type == LexemeType::Close_brace) {
             getLex();
             operator_();
             global::poliz_stack.push_back(new PolizOperand(K_Variable_Type_Int,
                                                            new std::vector<void *>(1, new int(step_expr_addr))));
             global::poliz_stack.push_back(new PolizOperator("Go", true));
-            global::poliz_stack[addr1]->upd(new std::vector<void *>(1, new int(global::poliz_stack.size())));
+//            global::poliz_stack[addr1]->upd(new std::vector<void *>(1, new int(global::poliz_stack.size())));
             for (auto i : global::break_stack.back()) {
-              global::poliz_stack[i]->upd(new std::vector<void *>(1, new int(global::poliz_stack.size())));
+//              global::poliz_stack[i]->upd(new std::vector<void *>(1, new int(global::poliz_stack.size())));
             }
             global::break_stack.pop_back();
             for (auto i : global::continue_stack.back()) {
-              global::poliz_stack[i]->upd(new std::vector<void *>(1, new int(global::poliz_stack.size())));
+//              global::poliz_stack[i]->upd(new std::vector<void *>(1, new int(global::poliz_stack.size())));
             }
             global::continue_stack.pop_back();
           } else {
@@ -395,13 +395,13 @@ void while_() {
         global::poliz_stack.push_back(new PolizOperand(K_Variable_Type_Int,
                                                        new std::vector<void *>(1, new int(expr_address))));
         global::poliz_stack.push_back(new PolizOperator("Go", true));
-        global::poliz_stack[addr1]->upd(new std::vector<void *>(1, new int(global::poliz_stack.size())));
+//        global::poliz_stack[addr1]->upd(new std::vector<void *>(1, new int(global::poliz_stack.size())));
         for (auto i : global::break_stack.back()) {
-          global::poliz_stack[i]->upd(new std::vector<void *>(1, new int(global::poliz_stack.size())));
+//          global::poliz_stack[i]->upd(new std::vector<void *>(1, new int(global::poliz_stack.size())));
         }
         global::break_stack.pop_back();
         for (auto i : global::continue_stack.back()) {
-          global::poliz_stack[i]->upd(new std::vector<void *>(1, new int(expr_address)));
+//          global::poliz_stack[i]->upd(new std::vector<void *>(1, new int(expr_address)));
         }
         global::continue_stack.pop_back();
       } else {
@@ -491,8 +491,8 @@ void switch_() {
             int adrEnd = global::poliz_stack.size();
             global::poliz_stack.push_back(new PolizOperand(K_Variable_Type_Int, nullptr));
             global::poliz_stack.push_back(new PolizOperator("Go", true));
-            dynamic_cast<PolizOperand *>(global::poliz_stack[add_first_go])->upd(new std::vector<void *>(1,
-                                                                                                         new int(global::poliz_stack.size())));
+//            dynamic_cast<PolizOperand *>(global::poliz_stack[add_first_go])->upd(new std::vector<void *>(1,
+//                                                                                                         new int(global::poliz_stack.size())));
             for (auto &[op, adr] : cases) {
               for (auto &to : expr) {
                 global::poliz_stack.push_back(to);
@@ -503,11 +503,11 @@ void switch_() {
                                                              new std::vector<void *>(1, new int(adr))));
               global::poliz_stack.push_back(new PolizOperator("F"));
             }
-            dynamic_cast<PolizOperand *>(global::poliz_stack[adrEnd])->upd(new std::vector<void *>(1,
-                                                                                                   new int(global::poliz_stack.size())));
+//            dynamic_cast<PolizOperand *>(global::poliz_stack[adrEnd])->upd(new std::vector<void *>(1,
+//                                                                                                   new int(global::poliz_stack.size())));
             for (auto &to : global::break_stack.back()) {
-              dynamic_cast<PolizOperand *>(global::poliz_stack[to])->upd(new std::vector<void *>(1,
-                                                                                                 new int(global::poliz_stack.size())));
+//              dynamic_cast<PolizOperand *>(global::poliz_stack[to])->upd(new std::vector<void *>(1,
+//                                                                                                 new int(global::poliz_stack.size())));
             }
             global::break_stack.pop_back();
           } else {
@@ -529,7 +529,7 @@ void switch_() {
 void variables_declaration_() {
   if (global::lex.type == LexemeType::Type) {
     if (global::lex.name == "array") {
-z      //TODO
+      //TODO
       getLex();
       auto cur_array_name = global::lex;
       identificator_();

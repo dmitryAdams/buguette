@@ -86,12 +86,15 @@ $(function(){ initResizable(false); });
 <div class="header">
   <div class="summary">
 <a href="#pub-methods">Открытые члены</a> &#124;
-<a href="#pro-attribs">Защищенные данные</a> &#124;
-<a href="#friends">Друзья</a> &#124;
 <a href="classStackElement-members.html">Полный список членов класса</a>  </div>
   <div class="headertitle"><div class="title">Класс StackElement<span class="mlabels"><span class="mlabel">abstract</span></span></div></div>
 </div><!--header-->
 <div class="contents">
+
+<p>Класс, чтобы хранить объекты для ПОЛИЗА интепретатора  
+ <a href="#details">Подробнее...</a></p>
+
+<p><code>#include &lt;<a class="el" href="StackElement_8h_source.html">StackElement.h</a>&gt;</code></p>
 <div class="dynheader">
 Граф наследования:StackElement:</div>
 <div class="dyncontent">
@@ -99,31 +102,19 @@ $(function(){ initResizable(false); });
   <img src="classStackElement.png" usemap="#StackElement_map" alt=""/>
   <map id="StackElement_map" name="StackElement_map">
 <area href="classPolizOperand.html" title="Класс отвечающий за хранение операндов, в формате необходимом Интерпретатору" alt="PolizOperand" shape="rect" coords="0,56,90,80"/>
-<area href="classPolizOperator.html" alt="PolizOperator" shape="rect" coords="100,56,190,80"/>
+<area href="classPolizOperator.html" title="Класс отвечающий за хранение операторов, в формате необходимом Интерпретатору" alt="PolizOperator" shape="rect" coords="100,56,190,80"/>
   </map>
 </div></div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Открытые члены</h2></td></tr>
 <tr class="memitem:a000603e67c75a559486577a8d7229847" id="r_a000603e67c75a559486577a8d7229847"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a000603e67c75a559486577a8d7229847">is_operator</a> ()=0</td></tr>
-<tr class="memdesc:a000603e67c75a559486577a8d7229847"><td class="mdescLeft">&#160;</td><td class="mdescRight">Метод, необходимый для правильной разименовки объектов из global::poliz_stack.  <br /></td></tr>
+<tr class="memdesc:a000603e67c75a559486577a8d7229847"><td class="mdescLeft">&#160;</td><td class="mdescRight">Метод, переопределен, как true - для <a class="el" href="classPolizOperator.html" title="Класс отвечающий за хранение операторов, в формате необходимом Интерпретатору">PolizOperator</a>, false - для всех остальных  <br /></td></tr>
 <tr class="separator:a000603e67c75a559486577a8d7229847"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af7629e9701fc014a58e47f2e3475c6cf" id="r_af7629e9701fc014a58e47f2e3475c6cf"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af7629e9701fc014a58e47f2e3475c6cf">upd</a> (void *)=0</td></tr>
-<tr class="separator:af7629e9701fc014a58e47f2e3475c6cf"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pro-attribs" name="pro-attribs"></a>
-Защищенные данные</h2></td></tr>
-<tr class="memitem:a1a23b43c27a2c3eb6c5b661aa86fd819" id="r_a1a23b43c27a2c3eb6c5b661aa86fd819"><td class="memItemLeft" align="right" valign="top"><a id="a1a23b43c27a2c3eb6c5b661aa86fd819" name="a1a23b43c27a2c3eb6c5b661aa86fd819"></a>
-std::string&#160;</td><td class="memItemRight" valign="bottom"><b>string_representation_</b></td></tr>
-<tr class="separator:a1a23b43c27a2c3eb6c5b661aa86fd819"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="friends" name="friends"></a>
-Друзья</h2></td></tr>
-<tr class="memitem:aead944199b1f3ae921b6683b0c7aab5b" id="r_aead944199b1f3ae921b6683b0c7aab5b"><td class="memItemLeft" align="right" valign="top"><a id="aead944199b1f3ae921b6683b0c7aab5b" name="aead944199b1f3ae921b6683b0c7aab5b"></a>
-std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operator&lt;&lt;</b> (std::ostream &amp;out, const <a class="el" href="classStackElement.html">StackElement</a> &amp;po)</td></tr>
-<tr class="separator:aead944199b1f3ae921b6683b0c7aab5b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<h2 class="groupheader">Методы</h2>
+<a name="details" id="details"></a><h2 class="groupheader">Подробное описание</h2>
+<div class="textblock"><p>Класс, чтобы хранить объекты для ПОЛИЗА интепретатора </p>
+</div><h2 class="groupheader">Методы</h2>
 <a id="a000603e67c75a559486577a8d7229847" name="a000603e67c75a559486577a8d7229847"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a000603e67c75a559486577a8d7229847">&#9670;&#160;</a></span>is_operator()</h2>
 
@@ -147,36 +138,9 @@ std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operato
 </table>
 </div><div class="memdoc">
 
-<p>Метод, необходимый для правильной разименовки объектов из global::poliz_stack. </p>
+<p>Метод, переопределен, как true - для <a class="el" href="classPolizOperator.html" title="Класс отвечающий за хранение операторов, в формате необходимом Интерпретатору">PolizOperator</a>, false - для всех остальных </p>
 
 <p>Замещается в <a class="el" href="classPolizOperand.html#af42c0323eb6a9edb6951f7fd2eacd855">PolizOperand</a> и <a class="el" href="classPolizOperator.html#ab783bfb5352ecf52c3ab495672125df8">PolizOperator</a>.</p>
-
-</div>
-</div>
-<a id="af7629e9701fc014a58e47f2e3475c6cf" name="af7629e9701fc014a58e47f2e3475c6cf"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#af7629e9701fc014a58e47f2e3475c6cf">&#9670;&#160;</a></span>upd()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">virtual void StackElement::upd </td>
-          <td>(</td>
-          <td class="paramtype">void *</td>          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">pure virtual</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Замещается в <a class="el" href="classPolizOperand.html#ac7b4af5c71d5a5d1469c7442a9babe3b">PolizOperand</a>.</p>
 
 </div>
 </div>

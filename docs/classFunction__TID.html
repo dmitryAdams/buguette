@@ -90,20 +90,30 @@ $(function(){ initResizable(false); });
   <div class="headertitle"><div class="title">Класс Function_TID</div></div>
 </div><!--header-->
 <div class="contents">
+
+<p>Таблица функций  
+ <a href="#details">Подробнее...</a></p>
+
+<p><code>#include &lt;<a class="el" href="Function__TID_8h_source.html">Function_TID.h</a>&gt;</code></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Открытые члены</h2></td></tr>
 <tr class="memitem:afb83df3d35439fadaa85318a8dd73c8f" id="r_afb83df3d35439fadaa85318a8dd73c8f"><td class="memItemLeft" align="right" valign="top"><a id="afb83df3d35439fadaa85318a8dd73c8f" name="afb83df3d35439fadaa85318a8dd73c8f"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>push_id</b> (K_Variable_Type type, const std::string &amp;name, const std::vector&lt; <a class="el" href="structExpression__Type.html">Expression_Type</a> &gt; &amp;args_types, const std::vector&lt; std::string &gt; &amp;args_names, int addr)</td></tr>
+<tr class="memdesc:afb83df3d35439fadaa85318a8dd73c8f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Добавить функцию в таблицу (вся необходимая информация для <a class="el" href="structFunctionKey.html" title="Информация, чтобы отличать функции друг от друга (имя, типы параметров)">FunctionKey</a> и <a class="el" href="structFunctionValue.html" title="Информация, о функции (тип возвращаемого значения, имена аргументов, адрес в ПОЛИЗ&#39;Е,...">FunctionValue</a>) <br /></td></tr>
 <tr class="separator:afb83df3d35439fadaa85318a8dd73c8f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae3438c9f4de7caa0de16b1853bbe5618" id="r_ae3438c9f4de7caa0de16b1853bbe5618"><td class="memItemLeft" align="right" valign="top"><a id="ae3438c9f4de7caa0de16b1853bbe5618" name="ae3438c9f4de7caa0de16b1853bbe5618"></a>
-<a class="el" href="structvalue.html">value</a>&#160;</td><td class="memItemRight" valign="bottom"><b>check_id</b> (const std::string &amp;name, const std::vector&lt; <a class="el" href="structExpression__Type.html">Expression_Type</a> &gt; &amp;args_types)</td></tr>
-<tr class="separator:ae3438c9f4de7caa0de16b1853bbe5618"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad9390c0dc2427cba03328a18f1aad6f6" id="r_ad9390c0dc2427cba03328a18f1aad6f6"><td class="memItemLeft" align="right" valign="top"><a id="ad9390c0dc2427cba03328a18f1aad6f6" name="ad9390c0dc2427cba03328a18f1aad6f6"></a>
-<a class="el" href="structvalue.html">value</a>&#160;</td><td class="memItemRight" valign="bottom"><b>check_id</b> (const <a class="el" href="structFunctionKey.html">FunctionKey</a> &amp;k)</td></tr>
-<tr class="separator:ad9390c0dc2427cba03328a18f1aad6f6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab6c514b2e47a12b01fad16d52fe248e0" id="r_ab6c514b2e47a12b01fad16d52fe248e0"><td class="memItemLeft" align="right" valign="top"><a id="ab6c514b2e47a12b01fad16d52fe248e0" name="ab6c514b2e47a12b01fad16d52fe248e0"></a>
+<a class="el" href="structFunctionValue.html">FunctionValue</a>&#160;</td><td class="memItemRight" valign="bottom"><b>check_id</b> (const std::string &amp;name, const std::vector&lt; <a class="el" href="structExpression__Type.html">Expression_Type</a> &gt; &amp;args_types)</td></tr>
+<tr class="memdesc:ab6c514b2e47a12b01fad16d52fe248e0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Проверить существует ли функция с таким имененм и набором параметров, если да - вернуть <a class="el" href="structFunctionValue.html" title="Информация, о функции (тип возвращаемого значения, имена аргументов, адрес в ПОЛИЗ&#39;Е,...">FunctionValue</a>. <br /></td></tr>
+<tr class="separator:ab6c514b2e47a12b01fad16d52fe248e0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a13c0408129f062311b49686613b46d20" id="r_a13c0408129f062311b49686613b46d20"><td class="memItemLeft" align="right" valign="top"><a id="a13c0408129f062311b49686613b46d20" name="a13c0408129f062311b49686613b46d20"></a>
+<a class="el" href="structFunctionValue.html">FunctionValue</a>&#160;</td><td class="memItemRight" valign="bottom"><b>check_id</b> (const <a class="el" href="structFunctionKey.html">FunctionKey</a> &amp;k)</td></tr>
+<tr class="memdesc:a13c0408129f062311b49686613b46d20"><td class="mdescLeft">&#160;</td><td class="mdescRight">Проверить существует ли функция с Таким <a class="el" href="structFunctionKey.html" title="Информация, чтобы отличать функции друг от друга (имя, типы параметров)">FunctionKey</a>, если да - вернуть <a class="el" href="structFunctionValue.html" title="Информация, о функции (тип возвращаемого значения, имена аргументов, адрес в ПОЛИЗ&#39;Е,...">FunctionValue</a>. <br /></td></tr>
+<tr class="separator:a13c0408129f062311b49686613b46d20"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<hr/>Объявления и описания членов класса находятся в файле:<ul>
+<a name="details" id="details"></a><h2 class="groupheader">Подробное описание</h2>
+<div class="textblock"><p>Таблица функций </p>
+</div><hr/>Объявления и описания членов класса находятся в файле:<ul>
 <li>semantic_analizator/TID/<a class="el" href="Function__TID_8h_source.html">Function_TID.h</a></li>
 </ul>
 </div><!-- contents -->

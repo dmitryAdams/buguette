@@ -7,7 +7,7 @@
 
 #include "exception"
 #include "string"
-
+/// \brief Ошибки, которые бросают блоки Синтаксического анализатора
 class SyntaxError : public std::exception{
  public:
   SyntaxError(const std::string& _str) : str(_str) {}

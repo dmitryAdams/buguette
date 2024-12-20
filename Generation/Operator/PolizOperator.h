@@ -40,11 +40,13 @@ enum KOperator {
 };
 
 #include "../../lib.h"
-
+/**
+ * \brief Класс отвечающий за хранение операторов, в формате необходимом Интерпретатору
+ */
 class PolizOperator : public StackElement {
  public:
   explicit PolizOperator(const std::string &operator_name, bool is_unary = false) {
-    string_representation_ = operator_name;
+//    string_representation_ = operator_name;
     if (!is_unary) {
       if (operator_name == "+") {
         self_ = KO_Bin_Plus;
@@ -110,7 +112,7 @@ class PolizOperator : public StackElement {
       }
     }
   }
-  void upd(void *) override {}
+//  void upd(void *) override {}
   bool is_operator() override {
     return true;
   }

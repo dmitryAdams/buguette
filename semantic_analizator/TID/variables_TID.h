@@ -6,11 +6,11 @@
 #define BUGGUETTE_SEMANTIC_ANALIZATOR_TID_VARIABLES_TID_H_
 
 #include "../../lib.h"
-
+/// \brief Хранит переменные текущего scope
 class variables_TID {
  public:
   variables_TID() = default;
-
+  /// \brief Добавить переменную в текущий scope
   bool addId(const std::string &name, K_Variable_Type type) {
     if (tid.count(name)) {
       return false;
@@ -42,6 +42,7 @@ class variables_TID {
 //      return true;
 //    }
 //  }
+/// \brief Проверить есть ли переменная в текущем scope, если да - вернуть тип, иначе - вернуть K_Variable_Type_NULLTYPE
   K_Variable_Type isInTID(const std::string &name) {
     if (tid.count(name)) {
       return tid.find(name)->second.first;
@@ -49,6 +50,7 @@ class variables_TID {
       return K_Variable_Type_NULLTYPE;
     }
   }
+  /// \brief Адрес вектора копий вызовов переменной
   std::vector<void *> *getVariableAdress(const std::string &name) {
     if (tid.count(name)) {
       return tid.find(name)->second.second;

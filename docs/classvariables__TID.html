@@ -91,17 +91,25 @@ $(function(){ initResizable(false); });
   <div class="headertitle"><div class="title">Класс variables_TID</div></div>
 </div><!--header-->
 <div class="contents">
+
+<p>Хранит переменные текущего scope.  
+ <a href="#details">Подробнее...</a></p>
+
+<p><code>#include &lt;<a class="el" href="variables__TID_8h_source.html">variables_TID.h</a>&gt;</code></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Открытые члены</h2></td></tr>
 <tr class="memitem:aeb9b45761dc0b2e1a15508fa60189934" id="r_aeb9b45761dc0b2e1a15508fa60189934"><td class="memItemLeft" align="right" valign="top"><a id="aeb9b45761dc0b2e1a15508fa60189934" name="aeb9b45761dc0b2e1a15508fa60189934"></a>
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>addId</b> (const std::string &amp;name, K_Variable_Type type)</td></tr>
+<tr class="memdesc:aeb9b45761dc0b2e1a15508fa60189934"><td class="mdescLeft">&#160;</td><td class="mdescRight">Добавить переменную в текущий scope. <br /></td></tr>
 <tr class="separator:aeb9b45761dc0b2e1a15508fa60189934"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a842cdb8dc44703bec7e273c07448545c" id="r_a842cdb8dc44703bec7e273c07448545c"><td class="memItemLeft" align="right" valign="top"><a id="a842cdb8dc44703bec7e273c07448545c" name="a842cdb8dc44703bec7e273c07448545c"></a>
 K_Variable_Type&#160;</td><td class="memItemRight" valign="bottom"><b>isInTID</b> (const std::string &amp;name)</td></tr>
+<tr class="memdesc:a842cdb8dc44703bec7e273c07448545c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Проверить есть ли переменная в текущем scope, если да - вернуть тип, иначе - вернуть K_Variable_Type_NULLTYPE. <br /></td></tr>
 <tr class="separator:a842cdb8dc44703bec7e273c07448545c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8934b147f636c9caae1af8a7525dc8cb" id="r_a8934b147f636c9caae1af8a7525dc8cb"><td class="memItemLeft" align="right" valign="top"><a id="a8934b147f636c9caae1af8a7525dc8cb" name="a8934b147f636c9caae1af8a7525dc8cb"></a>
 std::vector&lt; void * &gt; *&#160;</td><td class="memItemRight" valign="bottom"><b>getVariableAdress</b> (const std::string &amp;name)</td></tr>
+<tr class="memdesc:a8934b147f636c9caae1af8a7525dc8cb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Адрес вектора копий вызовов переменной <br /></td></tr>
 <tr class="separator:a8934b147f636c9caae1af8a7525dc8cb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-attribs" name="pub-attribs"></a>
@@ -110,7 +118,9 @@ std::vector&lt; void * &gt; *&#160;</td><td class="memItemRight" valign="bottom"
 std::map&lt; std::string, std::pair&lt; K_Variable_Type, std::vector&lt; void * &gt; * &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>tid</b></td></tr>
 <tr class="separator:a03afdecb71c65b15ad06468cee029ab9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<hr/>Объявления и описания членов класса находятся в файле:<ul>
+<a name="details" id="details"></a><h2 class="groupheader">Подробное описание</h2>
+<div class="textblock"><p>Хранит переменные текущего scope. </p>
+</div><hr/>Объявления и описания членов класса находятся в файле:<ul>
 <li>semantic_analizator/TID/<a class="el" href="variables__TID_8h_source.html">variables_TID.h</a></li>
 </ul>
 </div><!-- contents -->

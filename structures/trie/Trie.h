@@ -10,18 +10,17 @@
 #include "map"
 #include "vector"
 #include "string"
-
+/// \brief БОР для проверки на зарезервированные слова языка
 class Trie
 {
 public:
     Trie() : root_(new TrieNode()) {}
 
     Trie(const std::vector<std::string>& strs);
-
+/// \brief добавить слово в БОР
     void addString(const std::string& s);
-
+/// \brief Проверить есть ли слово в боре
     bool checkString(const std::string& s);
-
     ~Trie();
 
 private:

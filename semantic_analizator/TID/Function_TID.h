@@ -6,6 +6,8 @@
 #define BUGGUETTE_SEMANTIC_ANALIZATOR_TID_FUNCTION_TID_H_
 #include "../../lib.h"
 #include "../SemanticError/SemanticError.h"
+
+/// \brief Информация, чтобы отличать функции друг от друга (имя, типы параметров)
 struct FunctionKey {
   std::string name;
   std::vector<Expression_Type> types_of_args;
@@ -16,28 +18,32 @@ struct FunctionKey {
     return a.name < b.name;
   }
 };
-struct value {
+
+/** \brief Информация, о функции (тип возвращаемого значения, имена аргументов, адрес в ПОЛИЗ'Е,
+ с которого начинается исполнение функции)*/
+struct FunctionValue {
   K_Variable_Type type_of_return;
   std::vector<std::string> names_of_args;
   int poliz_addr;
 };
+/// \brief Таблица функций
 class Function_TID {
  public:
   Function_TID() = default;
+  /// \brief  Добавить функцию в таблицу (вся необходимая информация для FunctionKey и FunctionValue)
   void push_id(K_Variable_Type type,
                const std::string &name,
                const std::vector<Expression_Type> &args_types,
                const std::vector<std::string> &args_names, int addr) {
     if (tid.count({name, args_types})) {
-      //TODO
       throw SemanticError("multiply definition of function " + name);
     }
     tid[{name, args_types}] = {type, args_names, addr};
   }
-  value check_id(const std::string &name,
-                 const std::vector<Expression_Type> &args_types) {
+  /// \brief Проверить существует ли функция с таким имененм и набором параметров, если да - вернуть FunctionValue
+  FunctionValue check_id(const std::string &name,
+                         const std::vector<Expression_Type> &args_types) {
     if (!tid.count({name, args_types})) {
-      //TODO
       std::string error = "function with name: " + name + ", and args types: ";
       for(auto i : args_types){
         error += string_by_type(i);
@@ -47,9 +53,9 @@ class Function_TID {
     }
     return tid[{name, args_types}];
   }
-  value check_id(const FunctionKey &k) {
+  /// \brief Проверить существует ли функция с Таким FunctionKey, если да - вернуть FunctionValue
+  FunctionValue check_id(const FunctionKey &k) {
     if (!tid.count(k)) {
-      //TODO
       std::string error = "function with name: " + k.name + ", and args types: ";
       for(auto i : k.types_of_args){
         error += string_by_type(i);
@@ -77,7 +83,7 @@ class Function_TID {
       throw std::logic_error("working error unexpected type");
     }
   }
-  std::map<FunctionKey, value> tid;
+  std::map<FunctionKey, FunctionValue> tid;
 };
 
 #endif //BUGGUETTE_SEMANTIC_ANALIZATOR_TID_FUNCTION_TID_H_

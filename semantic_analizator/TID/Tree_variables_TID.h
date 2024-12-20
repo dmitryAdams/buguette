@@ -6,6 +6,8 @@
 #define BUGGUETTE_SEMANTIC_ANALIZATOR_TID_TREE_VARIABLES_TID_H_
 #include "variables_TID.h"
 #include "../SemanticError/SemanticError.h"
+
+/// \brief дерево TID'ов, хранит информацию о всех доступных переменных в текущем scope
 class Tree_variables_TID {
  public:
   Tree_variables_TID(){
@@ -14,17 +16,15 @@ class Tree_variables_TID {
   ~Tree_variables_TID(){
     for(auto &i : nodes) delete i;
   }
+  /// \brief Создать scope (вопросы?)
   void create_scope(){
     cur = new Node(cur);
   }
+  /// \brief Выйти из scope (вопросы?)
   void exit_scope(){
     cur = cur->pred;
-#ifdef DEBUG
-    if (cur == nullptr){
-      std::cerr << "WARNING!!!! you went out of scopes\n";
-    }
-#endif
   }
+  /// \brief Добавить переменную в текущий scope
   void push_id(const std::string &name, const std::string &type_){
     K_Variable_Type type = K_Variable_Type::K_Variable_Type_NULLTYPE;
     if (type_ == "int"){
@@ -44,12 +44,14 @@ class Tree_variables_TID {
       throw SemanticError("multiply definition of var with name: " + name);
     }
   }
+  /// \brief Добавить переменную в текущий scope
   void push_id(const std::string &name, K_Variable_Type &type_){
     K_Variable_Type type = type_;
     if(!cur->tid.addId(name, type)){
       throw SemanticError("multiply definition of var with name: " + name);
     }
   }
+  /// \brief Доступна ли переменная с таким именем в текущем scope, да - вернуть тип, нет - кинуть исключения
   K_Variable_Type check_id(const std::string &name){
     auto now = cur;
     while (now != nullptr){
@@ -61,6 +63,7 @@ class Tree_variables_TID {
     }
     return K_Variable_Type::K_Variable_Type_NULLTYPE;
   }
+  /// \brief Получить адрес, по которому лежит переменная
   void * getAdress(const std::string &name){
     auto now = cur;
     while (now != nullptr){
@@ -73,6 +76,8 @@ class Tree_variables_TID {
     return nullptr;
   }
 // private:
+/// \brief структура Node хранит TID текущего scope и указатель на Node отвечающего за родительский scope
+/// (scope, в который включен текущий)
   struct Node{
     Node *pred;
     variables_TID tid;

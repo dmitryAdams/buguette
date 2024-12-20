@@ -7,6 +7,7 @@
 #include <utility>
 
 #include "../../lib.h"
+///\brief Ошибки, бросаемые блоками семантического анализатора
 class SemanticError: public std::exception{
  public:
   explicit SemanticError(std::string  _str) : str(std::move(_str)) {}
