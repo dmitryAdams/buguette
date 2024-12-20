@@ -529,7 +529,7 @@ void switch_() {
 void variables_declaration_() {
   if (global::lex.type == LexemeType::Type) {
     if (global::lex.name == "array") {
-      //TODO написать хуйню для массивов
+z      //TODO
       getLex();
       auto cur_array_name = global::lex;
       identificator_();
@@ -894,7 +894,6 @@ Expression_Type expression_cool_() {
     auto cur_id = global::lex;
     identificator_();
     if (global::lex.type == LexemeType::Open_brace) {
-      //TODO НАПИСАТЬ ОПЕРАТОР ФУНКЦИИ И ДОБАВЛЯТЬ ЕЕ В ПОЛИЗ
       getLex();
       std::vector<Expression_Type> args_types = function_call_();
       if (global::lex.type == LexemeType::Close_brace) {
